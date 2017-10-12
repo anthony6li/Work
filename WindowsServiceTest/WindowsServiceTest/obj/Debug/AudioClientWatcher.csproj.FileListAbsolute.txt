@@ -1,0 +1,10 @@
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\Services\Uninstall.bat
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\Services\Install.bat
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\Services\WindowsServiceTest.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\Services\WindowsServiceTest.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Debug\AudioClientWatcher.csprojResolveAssemblyReference.cache
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Debug\WindowsServiceTest.ProjectInstaller.resources
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Debug\AudioClientWatcher.csproj.GenerateResource.Cache
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Debug\WindowsServiceTest.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Debug\WindowsServiceTest.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\Services\WindowsServiceTest.pdb

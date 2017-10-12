@@ -1,0 +1,12 @@
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\WindowsServiceTestARUI.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\WindowsServiceTestARUI.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Debug\WindowsServiceTestARUI.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Debug\WindowsServiceTestARUI.Properties.Resources.resources
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Debug\WindowsServiceTestARUI.csproj.GenerateResource.Cache
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Debug\WindowsServiceTestARUI.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Debug\WindowsServiceTestARUI.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Debug\WindowsServiceTestARUI.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Debug\WindowsServiceTestARUI.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Debug\WindowsServiceTestARUI.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Debug\WindowsServiceTestARUI.HandleService.resources
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Debug\WindowsServiceTestARUI.csprojResolveAssemblyReference.cache

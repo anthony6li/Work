@@ -1,0 +1,12 @@
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Release\WindowsServiceTestARUI.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Release\WindowsServiceTestARUI.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\bin\Release\WindowsServiceTestARUI.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Release\WindowsServiceTestARUI.HandleService.resources
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Release\WindowsServiceTestARUI.Properties.Resources.resources
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Release\WindowsServiceTestARUI.csproj.GenerateResource.Cache
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\AudioClientWatcherControl.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\AudioClientWatcherControl.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\AudioClientWatcherControl.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Release\AudioClientWatcherControl.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Release\AudioClientWatcherControl.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTestARUI\obj\Release\WindowsServiceTestARUI.csprojResolveAssemblyReference.cache

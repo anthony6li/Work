@@ -1,0 +1,16 @@
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\bin\Release\Uninstall.bat
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\bin\Release\Install.bat
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\bin\Release\WindowsServiceTest.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\bin\Release\WindowsServiceTest.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\bin\Release\WindowsServiceTest.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\bin\Release\Cjwdev.WindowsApi.dll
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\Uninstall.bat
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\Install.bat
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Release\WindowsServiceTest.ProjectInstaller.resources
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Release\AudioClientWatcher.csproj.GenerateResource.Cache
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\AudioClientWatcher.exe.config
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\AudioClientWatcher.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\bin\Release\AudioClientWatcher.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Release\AudioClientWatcher.exe
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Release\AudioClientWatcher.pdb
+X:\Users\enjoy\Desktop\AR\WindowsServiceTest\WindowsServiceTest\obj\Release\AudioClientWatcher.csprojResolveAssemblyReference.cache
