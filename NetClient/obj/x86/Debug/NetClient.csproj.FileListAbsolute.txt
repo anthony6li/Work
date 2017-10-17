@@ -26,3 +26,5 @@ C:\Users\nthon\Documents\Visual Studio 2015\Projects\NetClient\obj\x86\Debug\Net
 C:\Users\nthon\Documents\Visual Studio 2015\Projects\NetClient\obj\x86\Debug\NetClient.MainForm.resources
 C:\Users\nthon\Documents\Visual Studio 2015\Projects\NetClient\obj\x86\Debug\NetClient.Properties.Resources.resources
 C:\Users\nthon\Documents\Visual Studio 2015\Projects\NetClient\obj\x86\Debug\NetClient.csproj.GenerateResource.Cache
+X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.exe
+X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.pdb

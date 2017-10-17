@@ -55,3 +55,15 @@ D:\GitHub\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.MainForm.resource
 D:\GitHub\Work\AudioServer1\AudioServer\obj\Debug\AudioClient.Properties.Resources.resources
 D:\GitHub\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.SendVolumeLevel.resources
 D:\GitHub\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.csproj.GenerateResource.Cache
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\bin\Debug\AudioClient.exe.config
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioClient.exe
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioClient.pdb
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\bin\Debug\libmp3lame.32.dll
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\bin\Debug\libmp3lame.64.dll
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\bin\Debug\AudioClient.exe
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\bin\Debug\AudioClient.pdb
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.csprojResolveAssemblyReference.cache
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.MainForm.resources
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioClient.Properties.Resources.resources
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.SendVolumeLevel.resources
+X:\Users\enjoy\Desktop\AR\Work\AudioServer1\AudioServer\obj\Debug\AudioServer1.csproj.GenerateResource.Cache
