@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace JsonTestServer
 {
@@ -26,7 +27,8 @@ namespace JsonTestServer
         UpdateCamera,   //修改摄像头/麦克风
         DeviceSearch,   //查询对接设备
         CameraSearch,   //查询摄像头/麦克风
-        BatAddDevice,   //摄像头批量处理-IP段添加
+        BatAddDeviceFromIP,   //摄像头批量处理-IP段添加
+        BatAddDeviceFromXml,   //摄像头批量处理-IP段添加
         BatPingDevice,  //摄像头批量处理-测试设备是否连接
         SaveDevFile,    //摄像头批量处理-导出设备xml
         AlarmSupplier,  //获取“报警主机”设备供应商
@@ -81,77 +83,33 @@ namespace JsonTestServer
         BindUserRole,     //绑定用户角色
     }
 
+    public struct arrayIP
+    {
+        public string ip;
+    }
+
+    public struct arrayXml
+    {
+        public string devicetype;
+        public string devicename;
+        public string loginid;
+        public string loginpwd;
+        public string ip;
+        public string port;
+        public string mainrtsp;
+        public string auxrtsp;
+        public string flag;
+        public string devicestate;
+        public string note;
+        public string mic;
+        public string radio;
+    }
+
     public class JsonRequest
     {
         // 系统版本和运行情况
         public string method { get; set; }
-
-        #region 用户日志查询
-        public string begtime { get; set; } //开始时间
-        public string endtime { get; set; } //结束时间
-        public string user { get; set; }    //用户信息、设备登录用户
-        #endregion
-
-        #region 通用接口
-        #region  添加对接设备
-        public string devicetype { get; set; }  //设备类型
-        public string devicename { get; set; }  //设备名
-        public string name { get; set; }    //设备名
-        public string ip { get; set; }  //设备IP
-        public string port { get; set; }    //设备端口
-        public string pwd { get; set; } //设备登录密码
-        public string pin { get; set; } //设备产品型号
-        public string supplier { get; set; }    //设备供应商
-        public string in_channel { get; set; }  //报警主机输入端口数量
-        public string out_channel { get; set; } //报警主机输出端口数量
-        public string in_out { get; set; }  //门禁读卡器门内门外标记
-        public string chipin_count { get; set; }    //电源时序器插口数量
-        public string channel_count { get; set; }   //同录或CVR或智能分析仪通道数量
-        #endregion
-        #region 添加摄像头、麦克风
-        public string bindid { get; set; }   //绑定设备ID
-        public string groupid { get; set; }   //上级组ID
-        public string loginid { get; set; }   //设备登录ID
-        public string loginpwd { get; set; }   //设备登录密码
-        public string mainrtsp { get; set; }   //主流rtsp地址
-        public string auxrtsp { get; set; }   //辅流rtsp地址
-        public string flag { get; set; }   //使用主辅流标记
-        public string devicestate { get; set; }   //设备状态
-        public string note { get; set; }   //备注
-        public string mic { get; set; }   //拾音器
-        public string radio { get; set; }   //扬声器
-        #endregion
-        #region 删除摄像头、麦克风
-        public string delrecord { get; set; }   //删除录像文件
-        #endregion
-        #region 查询对接设备
-        public string isexact { get; set; }   //精确查找标记
-        #endregion
-        #region 摄像头批量处理
-        public string array { get; set; }   //[{"ip":"ip地址"},{"":""},...]
-        public string addmode { get; set; }   //批量添加类型
-        public string rtspflag { get; set; }   //录像使用主辅流标记
-        public string allurl { get; set; }   //使用主辅流地址是否是全地址
-        public string mainurl { get; set; }   //主流地址
-        public string auxurl { get; set; }   //辅流地址
-        #endregion
-        #region 测试摄像头设备是否连接
-        public string firstIP { get; set; }   //开始IP
-        public string lastIP { get; set; }   //结束IP
-        #endregion
-        #endregion
-
-        #region 报警主机
-        public string alarmid { get; set; }   //报警主机ID
-        public string cameraid { get; set; }   //摄像头ID
-        public string alarm_in_channel { get; set; }   //报警主机输入口
-        public string alarm_out_channel { get; set; }   //报警主机输出口
-        #endregion
-
-        #region 行为分析服务器
-        public string channel { get; set; } //通道号
-        #endregion
-
+        
         #region 中央存储服务器(CVR)
         public string starttime { get; set; } //通道号
         public string savepath { get; set; }   //ftp保存路径
@@ -176,7 +134,7 @@ namespace JsonTestServer
         #endregion
 
         #region 房间操作
-        public string areaid { get; set; }   //房间ID
+        //public string areaid { get; set; }   //房间ID
         public string areaname { get; set; }   //房间名
         public string areatype { get; set; }   //房间类型
         public string area { get; set; }   //房间ID或房间名
@@ -191,11 +149,642 @@ namespace JsonTestServer
         #endregion
     }
 
+    #region JsonRequestObjects
+    /// <summary>
+    /// 获取系统版本，该子类无特有属性
+    /// </summary>
+    public class JsonObjVersion : JsonRequest
+    {
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK HedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body = new Body() { retCode = "0", retMsg = "CMS 1.0.0.1" };
+        //        m_hedaAck.Header = new Header() { MessageType = "MSG_SG_SYSTEM_INFO_ACK", Version = "1.0" };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 获取系统运行情况，该子类无特有属性
+    /// </summary>
+    public class JsonObjRunStatus : JsonRequest
+    {
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK hedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body  = new Body()
+        //        {
+        //            cpu_percent = "0",
+        //            mem_percent = "0",
+        //            mem_usage = "47.8MB",
+        //            retCode = "0",
+        //            retMsg = "系统信息查询成功"
+        //        };
+        //        m_hedaAck.Header = new Header()
+        //        {
+        //            MessageType = "MSG_SG_SYSTEM_INFO_ACK",
+        //            Version = "1.0"
+        //        };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 用户日志查询
+    /// </summary>
+    /// 
+    public class JsonObjUserLogSearch : JsonRequest
+    {
+        public string begtime { get; set; } //开始时间
+        public string endtime { get; set; } //结束时间
+        public string user { get; set; }    //用户信息、设备登录用户
+
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK HedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body = new Body()
+        //        {
+        //            cpu_percent = "0",
+        //            mem_percent = "0",
+        //            mem_usage = "47.8MB",
+        //            retCode = "0",
+        //            retMsg = "系统信息查询成功"
+        //        };
+        //        m_hedaAck.Header = new Header()
+        //        {
+        //            MessageType = "MSG_SG_USER_MGR_ACK",
+        //            Version = "1.0"
+        //        };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 添加对接设备
+    /// </summary>
+    public class JsonObjAddDevice : JsonRequest
+    {
+        public string devicetype { get; set; }  //设备类型
+        public string devicename { get; set; }  //设备名
+        public string name { get; set; }    //设备名
+        public string ip { get; set; }  //设备IP
+        public string port { get; set; }    //设备端口
+        public string user { get; set; }    //设备登录用户
+        public string pwd { get; set; } //设备登录密码
+        public string pin { get; set; } //设备产品型号
+        public string supplier { get; set; }    //设备供应商
+        public string in_channel { get; set; }  //报警主机输入端口数量
+        public string out_channel { get; set; } //报警主机输出端口数量
+        public string in_out { get; set; }  //门禁读卡器门内门外标记
+        public string chipin_count { get; set; }    //电源时序器插口数量
+        public string channel_count { get; set; }   //同录或CVR或智能分析仪通道数量
+
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK HedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body = new Body() { retCode = "0", retMsg = "添加设备成功" };
+        //        m_hedaAck.Header = new Header() { MessageType = "MSG_SG_DEVICE_ACK_ACK", Version = "1.0" };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 添加摄像头、麦克风
+    /// </summary>
+    public class JsonObjAddCamera : JsonRequest
+    {
+        public string devicetype { get; set; }  //设备类型
+        public string devicename { get; set; }  //设备名
+        public string bindid { get; set; }   //绑定设备ID
+        public string groupid { get; set; }   //上级组ID
+        public string loginid { get; set; }   //设备登录ID
+        public string loginpwd { get; set; }   //设备登录密码
+        public string ip { get; set; }  //设备IP
+        public string port { get; set; }    //设备端口
+        public string mainrtsp { get; set; }   //主流rtsp地址
+        public string auxrtsp { get; set; }   //辅流rtsp地址
+        public string flag { get; set; }   //使用主辅流标记
+        public string devicestate { get; set; }   //设备状态
+        public string note { get; set; }   //备注
+        public string mic { get; set; }   //拾音器
+        public string radio { get; set; }   //扬声器
+
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK HedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body = new Body()
+        //        {
+        //            deviceid = "CMS0001-D2000002",
+        //            mainurl = "rtsp://10.10.1.194:554/CMS0001-D2000002-0_VEDIO.sdp",
+        //            auxurl = "rtsp://10.10.1.194:554/CMS0001-D2000002-1_VEDIO.sdp",
+        //            retCode = "0",
+        //            retMsg = "添加设备成功"
+        //        };
+        //        m_hedaAck.Header = new Header()
+        //        {
+        //            MessageType = "MSG_SC_DEICE_MGR_ACK",
+        //            Version = "1.0"
+        //        };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 删除对接设备
+    /// </summary>
+    public class JsonObjDelDevice : JsonRequest
+    {
+        public string deviceid { get; set; }
+
+
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK hedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body = new Body()
+        //        {
+        //            retCode = "0",
+        //            retMsg = "设备删除成功"
+        //        };
+        //        m_hedaAck.Header = new Header()
+        //        {
+        //            MessageType = "MSG_SC_DEICE_ACT_ACK",
+        //            Version = "1.0"
+        //        };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 删除摄像头、麦克风
+    /// </summary>
+    public class JsonObjDeleteCamera : JsonRequest
+    {
+        public string deviceid { get; set; }
+        public string devicename { get; set; }
+        public string delrecord { get; set; }
+
+        public HedaACK m_hedaAck = new HedaACK();
+        /// <summary>
+        /// 返回的正确应答格式
+        /// </summary>
+        public HedaACK hedaAck
+        {
+            get
+            {
+                m_hedaAck.Body = new Body()
+                {
+                    retCode = "0",
+                    retMsg = "删除设备成功"
+                };
+                m_hedaAck.Header = new Header()
+                {
+                    MessageType = "MSG_SC_DEVICE_MGR_ACK",
+                    Version = "1.0"
+                };
+                return m_hedaAck;
+            }
+            set { m_hedaAck = value; }
+        }
+    }
+
+    /// <summary>
+    /// 修改对接设备
+    /// </summary>
+    public class JsonObjUpdateDevice : JsonRequest
+    {
+        public string devicetype { get; set; }  //设备类型
+        public string devicename { get; set; }  //设备名
+        public string name { get; set; }   //绑定设备ID
+        public string ip { get; set; }  //设备IP
+        public string port { get; set; }    //设备端口
+        public string user { get; set; }    //设备登录用户
+        public string pwd { get; set; }    //设备登录密码
+        public string in_channel { get; set; }  //报警主机输入端口数量
+        public string out_channel { get; set; } //报警主机输出端口数量
+        public string chipin_count { get; set; }    //电源时序器插口数量
+        public string channel_count { get; set; }   //同录或CVR或智能分析仪通道数量
+
+        public HedaACK m_hedaAck = new HedaACK();
+        /// <summary>
+        /// 返回的正确应答格式
+        /// </summary>
+        public HedaACK hedaAck
+        {
+            get
+            {
+                m_hedaAck.Body = new Body()
+                {
+                    retCode = "0",
+                    retMsg = "修改设备成功"
+                };
+                m_hedaAck.Header = new Header()
+                {
+                    MessageType = "MSG_SC_DEVICE_ACT_ACK",
+                    Version = "1.0"
+                };
+                return m_hedaAck;
+            }
+            set { m_hedaAck = value; }
+        }
+
+    }
+
+    /// <summary>
+    /// 修改摄像头、麦克风
+    /// </summary>
+    public class JsonObjUpdateCamera : JsonRequest
+    {
+        public string devicetype { get; set; }  //设备类型
+        public string devicename { get; set; }  //设备名
+        public string bindid { get; set; }   //绑定设备ID
+        public string groupid { get; set; }   //上级组ID
+        public string loginid { get; set; }   //设备登录ID
+        public string loginpwd { get; set; }   //设备登录密码
+        public string ip { get; set; }  //设备IP
+        public string port { get; set; }    //设备端口
+        public string mainrtsp { get; set; }   //主流rtsp地址
+        public string auxrtsp { get; set; }   //辅流rtsp地址
+        public string flag { get; set; }   //使用主辅流标记
+        public string devicestate { get; set; }   //设备状态
+        public string note { get; set; }   //备注
+        public string mic { get; set; }   //拾音器
+        public string radio { get; set; }   //扬声器
+
+        //public HedaACK m_hedaAck = new HedaACK();
+        ///// <summary>
+        ///// 返回的正确应答格式
+        ///// </summary>
+        //public HedaACK hedaAck
+        //{
+        //    get
+        //    {
+        //        m_hedaAck.Body = new Body()
+        //        {
+        //            r_main_rtsp = "rtsp://10.10.1.194:554/CMS0001-D2000002-0_VEDIO.sdp",
+        //            r_aux_rtsp = "rtsp://10.10.1.194:554/CMS0001-D2000002-1_VEDIO.sdp",
+        //            retCode = "0",
+        //            retMsg = "添加设备成功"
+        //        };
+        //        m_hedaAck.Header = new Header()
+        //        {
+        //            MessageType = "MSG_SC_DEICE_MGR_ACK",
+        //            Version = "1.0"
+        //        };
+        //        return m_hedaAck;
+        //    }
+        //    set { m_hedaAck = value; }
+        //}
+    }
+
+    /// <summary>
+    /// 查询对接设备
+    /// </summary>
+    public class JsonObjDeviceSearch : JsonRequest
+    {
+        public string device { get; set; }  //设备ID或设备名
+        public string devicetype { get; set; }  //设备类型
+        public string isexact { get; set; } //精确查找标记
+    }
+
+    /// <summary>
+    /// 查询摄像头/麦克风
+    /// </summary>
+    public class JsonObjCameraSearch : JsonRequest
+    {
+        public string platid { get; set; }  //平台ID
+        public string device { get; set; }  //设备ID或设备名
+        public string devicetype { get; set; }  //设备类型
+        public string isexact { get; set; } //精确查找标记
+    }
+
+    /// <summary>
+    /// IP段批量添加摄像头
+    /// </summary>
+    public class JsonObjBatAddDeviceFromIP : JsonRequest
+    {
+        public string devicetype { get; set; }  //设备类型
+        public string addmode { get; set; }//批量添加类型"
+        public string loginid { get; set; }//设备连接名"
+        public string loginpwd { get; set; }//设备连接密码"
+        public string rtspflag { get; set; }//录像使用主辅流标记"
+        public string allurl { get; set; }//使用主辅流地址是否是全地址"
+        public string mainurl { get; set; }//主流地址"
+        public string auxurl { get; set; }//辅流地址"
+        public string mic { get; set; }//拾音器"
+        public string radio { get; set; }//扬声器"
+        public List<arrayIP> array = new List<arrayIP>();  //[{"ip":"ip地址"},{"":""},...]
+    }
+
+    /// <summary>
+    /// XML 批量添加摄像头
+    /// </summary>
+    public class JsonObjBatAddDeviceFromXml : JsonRequest
+    {
+        public string addmode { get; set; }//批量添加类型"
+        public List<arrayXml> array = new List<arrayXml>();
+    }
+
+    /// <summary>
+    /// 测试IP范围内的设备是否连接
+    /// </summary>
+    public class JsonObjBatPingDevice : JsonRequest
+    {
+        public string firstIP { get; set; }   //开始IP
+        public string lastIP { get; set; }   //结束IP
+
+    }
+
+    /// <summary>
+    /// 导出设备xml，该子类无特有属性
+    /// </summary>
+    public class JsonObjSaveDevFile : JsonRequest
+    {
+    }
+
+    /// <summary>
+    /// 获取报警主机设备供应商
+    /// </summary>
+    public class JsonObjAlarmSupplier : JsonRequest
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
+
+    /// <summary>
+    /// 报警主机和摄像头绑定
+    /// </summary>
+    public class JsonObjBindAlarmCamera : JsonRequest
+    {
+        public string alarmid { get; set; }   //报警主机ID
+        public string cameraid { get; set; }   //摄像头ID
+        public string alarm_in_channel { get; set; }   //报警主机输入口
+        public string alarm_out_channel { get; set; }   //报警主机输出口
+    }
+
+    /// <summary>
+    /// 报警主机和摄像头解绑定.
+    /// 所有属性继承JsonObjBindAlarmCamera 父类
+    /// </summary>
+    public class JsonObjRebindAlarmCamera : JsonObjBindAlarmCamera
+    {
+    }
+
+    /// <summary>
+    /// 查询报警主机和摄像头绑定信息
+    /// 额外指定房间即可，其它属性继承JsonObjBindAlarmCamera 绑定类
+    /// </summary>
+    public class JsonObjGetAlarmCamera : JsonObjBindAlarmCamera
+    {
+        public string areaid { get; set; }   //房间ID
+    }
+
+    /// <summary>
+    /// 获取行为分析服务器设备供应商
+    /// </summary>
+    public class JsonObjBASupplier : JsonRequest
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
+
+    /// <summary>
+    /// 智能分析仪通道与摄像头绑定
+    /// 需要指定CameraID和通道号
+    /// 继承关系（JsonObjGetBACamera：JsonObjBASupplier：JsonRequest）。
+    /// </summary>
+    public class JsonObjBindBACamera : JsonObjGetBACamera
+    {
+        public string channel { get; set; }     //通道号
+    }
+
+    /// <summary>
+    /// 查询智能分析仪通道与摄像头绑定信息
+    /// 需要指定CameraID，继承JsonObjBASupplier即可。
+    /// </summary>
+    public class JsonObjGetBACamera : JsonObjBASupplier
+    {
+        public string cameraid { get; set; }    //摄像头ID
+    }
+
+    /// <summary>
+    /// 删除智能分析仪通道与摄像头绑定信息
+    /// 删除与绑定需要的属性相同，所有属性继承之JsonObjGetBACamera
+    /// </summary>
+    public class JsonObjDeleteBACamera : JsonObjGetBACamera
+    { }
+
+    /// <summary>
+    /// 启用和关闭智能分析仪通道与摄像头绑定信息
+    /// 只需要再额外指定状态，其它属性继承JsonObjOpenBACamera即可
+    /// 继承关系（JsonObjOpenBACamera:JsonObjGetBACamera:JsonObjBASupplier:JsonRequest）。
+    /// </summary>
+    public class JsonObjOpenBACamera : JsonObjBindBACamera
+    {
+        public string state { get; set; }   //状态，1-启用，0-关闭
+    }
+
+    public class JsonObjCVRSupplier : JsonRequest
+    { }
+
+    public class JsonObjBindCVRCamera : JsonRequest
+    { }
+
+    public class JsonObjGetCVRCamera : JsonRequest
+    { }
+
+    public class JsonObjGetCVRFileList : JsonRequest
+    { }
+
+    public class JsonObjStartDownloadFile : JsonRequest
+    { }
+
+    public class JsonObjGetDownloadPos : JsonRequest
+    { }
+
+    public class JsonObjStopDownload : JsonRequest
+    { }
+
+    public class JsonObjStartDownloadAreaFile : JsonRequest
+    { }
+
+    public class JsonObjPTZControl : JsonRequest
+    { }
+
+    public class JsonObjPTZPreset : JsonRequest
+    { }
+
+    public class JsonObjDecoderSupplier : JsonRequest
+    { }
+
+    public class JsonObjDoorCardSupplier : JsonRequest
+    { }
+
+    public class JsonObjGetDoorCardLog : JsonRequest
+    { }
+
+    public class JsonObjNetKeySupplier : JsonRequest
+    { }
+
+    public class JsonObjPSSupplier : JsonRequest
+    { }
+
+    public class JsonObjGetSequencerConf : JsonRequest
+    { }
+
+    public class JsonObjSequencerConf : JsonRequest
+    { }
+
+    public class JsonObjDeleteSequencerConf : JsonRequest
+    { }
+
+    public class JsonObjSyncRecordSupplier : JsonRequest
+    { }
+
+    public class JsonObjBindSyncRecordCamera : JsonRequest
+    { }
+
+    public class JsonObjGetSyncRecordCamera : JsonRequest
+    { }
+
+    public class JsonObjDeleteSyncRecordCamera : JsonRequest
+    { }
+
+    public class JsonObjAddArea : JsonRequest
+    { }
+
+    public class JsonObjDelArea : JsonRequest
+    { }
+
+    public class JsonObjUpdateArea : JsonRequest
+    { }
+
+    public class JsonObjGetArea : JsonRequest
+    { }
+
+    public class JsonObjBindAreaDevice : JsonRequest
+    { }
+
+    public class JsonObjGetAreaDevice : JsonRequest
+    { }
+
+    public class JsonObjGetAreaCamera : JsonRequest
+    { }
+
+    public class JsonObjAddUser : JsonRequest
+    { }
+
+    public class JsonObjUpdateUser : JsonRequest
+    { }
+
+    public class JsonObjUpdateUserInfo : JsonRequest
+    { }
+
+    public class JsonObjDeleteUser : JsonRequest
+    { }
+
+    public class JsonObjUserLogin : JsonRequest
+    { }
+
+    public class JsonObjUserSearch : JsonRequest
+    { }
+
+    public class JsonObjCheckUserID : JsonRequest
+    { }
+
+    public class JsonObjResetUserPwd : JsonRequest
+    { }
+
+    public class JsonObjUpdatePwd : JsonRequest
+    { }
+
+    public class JsonObjBindUserRole : JsonRequest
+    { }
+
+
+    #endregion
+
     #region Json ACK
     public class Body
     {
+        /// <summary>
+        /// 错误码，0-成功、1-操作失败
+        /// </summary>
         public string retCode { get; set; }
+        /// <summary>
+        /// 返回具体的错误信息
+        /// </summary>
         public string retMsg { get; set; }
+        //CPU使用率（百分比）
+        public string cpu_percent { get; set; }
+        /// <summary>
+        /// 内存使用率（百分比）
+        /// </summary>
+        public string mem_percent { get; set; }
+        /// <summary>
+        /// 内存使用量（MB）
+        /// </summary>
+        public string mem_usage { get; set; }
+        /// <summary>
+        /// 新添加设备ID，错误时不返回此属性
+        /// </summary>
+        public string deviceid { get; set; }
+        /// <summary>
+        /// 转发后的主流地址
+        /// </summary>
+        public string mainurl { get; set; }
+        /// <summary>
+        /// 转发后的辅流地址
+        /// </summary>
+        public string auxurl { get; set; }
+        /// <summary>
+        /// 修改设备后的新的辅流转发地址
+        /// </summary>
+        public string r_aux_rtsp { get; set; }
+
+        /// <summary>
+        /// 修改设备后的新的主流转发地址
+        /// </summary>
+        public string r_main_rtsp { get; set; }
     }
 
     public class Header
