@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Tree>
+	<Node Name="SystemInformation" Text="系统信息" >
+		<Node Name="Version" Text="获取系统版本" />
+		<Node Name="RunStatus" Text="获取系统运行情况" />
+		<Node Name="UserLogSearch" Text="用户日志查询" />
+	</Node>
+	<Node Name="EquipmentOperation" Text="设备操作" >
+		<Node Name="TongYongJieKou" Text="通用接口" >
+			<Node Name="AddDevice" Text="添加对接设备" />
+			<Node Name="AddCamera" Text="添加摄像头、麦克风" />
+			<Node Name="DelDevice" Text="删除对接设备" />
+			<Node Name="DeleteCamera" Text="删除摄像头、麦克风" />
+			<Node Name="UpdateDevice" Text="修改对接设备" />
+			<Node Name="UpdateCamera" Text="修改摄像头、麦克风" />
+			<Node Name="DeviceSearch" Text="查询对接设备" />
+			<Node Name="CameraSearch" Text="查询摄像头、麦克风" />
+			<Node Name="BatCamaraControl" Text="摄像头批量处理" >
+				<Node Name="BatAddDeviceFromIP" Text="IP段添加" />
+				<Node Name="BatAddDeviceFromXml" Text="xml配置导入摄像头" />
+				<Node Name="BatPingDevice" Text="测试设备是否连接" />
+				<Node Name="BatAddDeviceImportXML" Text="导入设备xml" />
+				<Node Name="SaveDevFile" Text="导出设备xml" />
+			</Node>
+		</Node>
+		<Node Name="AlarmMainEngine" Text="报警主机" >
+			<Node Name="AlarmSupplier" Text="获取设备供应商" />
+			<Node Name="BindAlarmCamera" Text="报警主机和摄像头绑定" />
+			<Node Name="RebindAlarmCamera" Text="报警主机和摄像头解绑定" />
+			<Node Name="GetAlarmCamera" Text="查询报警主机和摄像头绑定信息" />
+		</Node>
+		<Node Name="BehaviorAnalysisServer" Text="行为分析服务器" >
+			<Node Name="BASupplier" Text="获取设备供应商" />
+			<Node Name="BindBACamera" Text="智能分析仪通道与摄像头绑定" />
+			<Node Name="GetBACamera" Text="查询智能分析仪通道与摄像头绑定信息" />
+			<Node Name="DeleteBACamera" Text="删除智能分析仪通道与摄像头绑定信息" />
+			<Node Name="OpenBACamera" Text="启用和关闭智能分析仪通道与摄像头绑定信息" />
+		</Node>
+		<Node Name="CVR" Text="中央存储服务器">
+			<Node Name="CVRSupplier" Text="获取系统版本" />
+			<Node Name="BindCVRCamera" Text="中央存储通道与摄像头绑定" />
+			<Node Name="GetCVRCamera" Text="查询中央存储通道与摄像头绑定信息" />
+			<Node Name="DeleteCVRCamera" Text="删除中央存储通道与摄像头绑定信息" />
+			<Node Name="GetCVRFileList" Text="查询录像文件列表" />
+			<Node Name="StartDownloadFile" Text="开始下载录像文件" />
+			<Node Name="GetDownloadPos" Text="获取下载进度" />
+			<Node Name="StopDownload" Text="停止下载" />
+			<Node Name="StartDownloadAreaFile" Text="开始下载房间所有指定时间内录像文件" />
+			<Node Name="PTZControl" Text="云台控制" />
+			<Node Name="PTZPreset" Text="预置点控制" />
+		</Node>
+		<Node Name="Decoder" Text="解码器">
+			<Node Name="DecoderSupplier" Text="获取系统版本" />
+		</Node>
+		<Node Name="EntranceGrard" Text="门禁">
+			<Node Name="DoorCardSupplier" Text="获取设备供应商" />
+			<Node Name="GetDoorCardLog" Text="查询刷卡记录" />
+		</Node>
+		<Node Name="InternetKeyboard" Text="网络键盘">
+			<Node Name="NetKeySupplier" Text="获取设备供应商" />
+		</Node>
+		<Node Name="PowerSequence" Text="电源时序器">
+			<Node Name="PSSupplier" Text="获取设备供应商" />
+			<Node Name="GetSequencerConf" Text="获取电源时序器启动配置信息" />
+			<Node Name="SequencerConf" Text="添加电源时序器启动配置信息" />
+			<Node Name="DeleteSequencerConf" Text="删除电源时序器启动配置信息" />
+		</Node>
+		<Node Name="SyncAudioVideoRecording" Text="同步录音录像">
+			<Node Name="SyncRecordSupplier" Text="获取设备供应商" />
+			<Node Name="BindSyncRecordCamera" Text="同录设备通道与摄像头绑定" />
+			<Node Name="GetSyncRecordCamera" Text="查询同录通道与摄像头绑定信息" />
+			<Node Name="DeleteSyncRecordCamera" Text="删除同录通道与摄像头绑定信息" />
+		</Node>
+	</Node>
+	<Node Name="AreaManagement" Text="房间操作" >
+		<Node Name="AddArea" Text="添加房间" />
+		<Node Name="DelArea" Text="删除房间" />
+		<Node Name="UpdateArea" Text="修改房间" />
+		<Node Name="GetArea" Text="查询房间" />
+		<Node Name="BindAreaDevice" Text="绑定房间和设备" />
+		<Node Name="GetAreaDevice" Text="查询房间关联对接设备信" />
+		<Node Name="GetAreaCamera" Text="查询房间摄像头信息" />
+	</Node>
+	<Node Name="UserManagement" Text="用户管理" >
+		<Node Name="AddUser" Text="添加用户" />
+		<Node Name="UpdateUser" Text="修改用户(包括权限)" />
+		<Node Name="UpdateUserInfo" Text="修改用户资料(个人中心修改自身信息)" />
+		<Node Name="DeleteUser" Text="删除用户" />
+		<Node Name="UserLogin" Text="用户登录" />
+		<Node Name="UserSearch" Text="用户信息查询" />
+		<Node Name="UserLogSearch" Text="用户日志查询" />
+		<Node Name="CheckUserID" Text="校验用户ID" />
+		<Node Name="ResetUserPwd" Text="重置密码" />
+		<Node Name="获取所有用户" Text="GetUser" />
+		<Node Name="UpdatePwd" Text="修改用户密码" />
+		<Node Name="BindUserRole" Text="绑定用户角色" />
+	</Node>
+</Tree>
