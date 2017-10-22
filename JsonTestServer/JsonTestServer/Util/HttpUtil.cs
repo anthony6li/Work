@@ -221,7 +221,9 @@ namespace Util
                         break;
                     case JsonMethodType.BatAddDeviceFromIP:
                         JsonObjBatAddDeviceFromIP joBADFI = new JsonObjBatAddDeviceFromIP();
-                        joBADFI.method = type;
+                        joBADFI.array = new List<arrayIP>();
+                        joBADFI.array.Add(new arrayIP() { ip = "IP地址" });
+                        joBADFI.array.Add(new arrayIP() { ip = "IP地址" });
                         joBADFI.devicetype = "设备类型";
                         joBADFI.addmode = "批量添加类型";
                         joBADFI.loginid = "设备连接名";
@@ -232,7 +234,8 @@ namespace Util
                         joBADFI.auxurl = "辅流地址";
                         joBADFI.mic = "拾音器";
                         joBADFI.radio = "扬声器";
-                        joBADFI.array.Add(new arrayIP() { ip = "IP地址" });
+                        joBADFI.method = type;
+                        jsonSetting.TypeNameHandling = TypeNameHandling.Auto; 
                         tempJsonStr = JsonConvert.SerializeObject(joBADFI, jsonSetting);
                         break;
                     case JsonMethodType.BatAddDeviceFromXml:
@@ -252,6 +255,7 @@ namespace Util
                         aX.mic = "拾音器";
                         aX.radio = "扬声器";
                         joBPDFX.array.Add(aX);
+                        jsonSetting.TypeNameHandling = TypeNameHandling.Auto;
                         tempJsonStr = JsonConvert.SerializeObject(joBPDFX, jsonSetting);
                         break;
                     case JsonMethodType.BatPingDevice:
