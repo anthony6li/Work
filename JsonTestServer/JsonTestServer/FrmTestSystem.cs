@@ -28,8 +28,10 @@ namespace JsonTestServer
         private void Form1_Load(object sender, System.EventArgs e)
         {
             this.tv_Method.ExpandAll();
-            doc.Load("TreeXml.xml"); 
+            doc.Load("Resource\\TreeXml.xml");
+            //doc.Load(Properties.Resources.TreeXml); 
             RecursionTreeControl(doc.DocumentElement, tv_Method.Nodes);//将加载完成的XML文件显示在TreeView控件
+            tv_Method.ExpandAll();
         }
 
         private void btn_POST_Click(object sender, EventArgs e)

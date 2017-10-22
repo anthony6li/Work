@@ -83,11 +83,27 @@ namespace JsonTestServer
         BindUserRole,     //绑定用户角色
     }
 
+    /// <summary>
+    /// 所有模块的请求都需要指定method，指定为父类
+    /// </summary>
+    public class JsonRequest
+    {
+        // 系统版本和运行情况
+        public string method { get; set; }
+    }
+
+    #region JsonRequestObjects
+    /// <summary>
+    /// IP导入摄像头时,指定IP
+    /// </summary>
     public struct arrayIP
     {
         public string ip;
     }
 
+    /// <summary>
+    /// xml配置导入摄像头时，每个摄像头的信息
+    /// </summary>
     public struct arrayXml
     {
         public string devicetype;
@@ -105,26 +121,23 @@ namespace JsonTestServer
         public string radio;
     }
 
-    public class JsonRequest
+    /// <summary>
+    /// 指定设备的ID，Name和Type
+    /// </summary>
+    public struct arrayArea
     {
-        // 系统版本和运行情况
-        public string method { get; set; }
-
-        #region 房间操作
-        //public string areaid { get; set; }   //房间ID
-
-        #endregion
-
-        #region 用户管理
-        public string userid { get; set; }   //用户ID
-        public string username { get; set; }   //真实姓名
-        public string telephone { get; set; }   //办公室电话
-        public string email { get; set; }   //电子邮件
-        public string roleid { get; set; }   //角色ID
-        #endregion
+        public string deviceid;
+        public string devicename;
+        public string devicetype;
     }
 
-    #region JsonRequestObjects
+    /// <summary>
+    /// 用户角色ID集合
+    /// </summary>
+    public struct arrayUser
+    {
+        public string roleid;
+    }
     /// <summary>
     /// 获取系统版本，该子类无特有属性
     /// </summary>
@@ -821,46 +834,126 @@ namespace JsonTestServer
         public string isexact { get; set; } //精确查找标记
     }
 
-    public class JsonObjBindAreaDevice : JsonRequest
-    { }
+    /// <summary>
+    /// 绑定房间和设备
+    /// 指定设备信息，继承查询类 JsonObjGetAreaDevice
+    /// </summary>
+    public class JsonObjBindAreaDevice : JsonObjGetAreaDevice
+    {
+        public arrayArea array { get; set; }    //
+    }
 
+    /// <summary>
+    /// 查询房间关联对接设备信息
+    /// </summary>
     public class JsonObjGetAreaDevice : JsonRequest
-    { }
+    {
+        public string areaid { get; set; }  //房间ID
+    }
 
-    public class JsonObjGetAreaCamera : JsonRequest
-    { }
+    /// <summary>
+    /// 查询房间摄像头信息
+    /// 指定房间名，继承查询类 JsonObjGetAreaDevice
+    /// </summary>
+    public class JsonObjGetAreaCamera : JsonObjGetAreaDevice
+    {
+        public string areaname { get; set; }    //房间ID或房间名模糊查询
+    }
 
-    public class JsonObjAddUser : JsonRequest
-    { }
+    /// <summary>
+    /// 添加用户
+    /// </summary>
+    public class JsonObjAddUser : JsonObjUpdateUser
+    {
+        public string pwd { get; set; }     //用户密码
+    }
 
+    /// <summary>
+    /// 修改用户(包括权限)
+    /// </summary>
     public class JsonObjUpdateUser : JsonRequest
+    { 
+        public string userid { get; set; }   //用户ID
+        public string username { get; set; }   //真实姓名
+        public string telephone { get; set; }   //办公室电话
+        public string mobile { get; set; }      //移动电话
+        public string email { get; set; }   //电子邮件
+       // public string roleid { get; set; }   //角色ID
+        public arrayUser array { get; set; }    //角色列表，可以没有此属性
+    }
+
+    /// <summary>
+    /// 修改用户资料(个人中心修改自身信息)
+    /// 所有属性继承添加用户类，JsonObjAddUser
+    /// </summary>
+    public class JsonObjUpdateUserInfo : JsonObjAddUser
     { }
 
-    public class JsonObjUpdateUserInfo : JsonRequest
-    { }
-
+    /// <summary>
+    /// 删除用户
+    /// </summary>
     public class JsonObjDeleteUser : JsonRequest
-    { }
+    {
+        public string userid { get; set; }   //用户ID
+    }
 
+    /// <summary>
+    /// 用户登录
+    /// </summary>
     public class JsonObjUserLogin : JsonRequest
+    {
+        public string userid { get; set; }   //用户ID
+        public string pwd { get; set; }     //用户登录密码，MD5加密后的
+        public string flag { get; set; }    //0-默认登录查询所有权限，1-winform客户端登录。
+
+    }
+
+    /// <summary>
+    /// 用户信息查询
+    /// 所有属性继承删除用户类，JsonObjDeleteUser
+    /// </summary>
+    public class JsonObjUserSearch : JsonObjDeleteUser
     { }
 
-    public class JsonObjUserSearch : JsonRequest
-    { }
-
+    /// <summary>
+    /// 校验用户ID
+    /// </summary>
     public class JsonObjCheckUserID : JsonRequest
-    { }
+    {
+        public string begtime { get; set; }     //开始时间，格式：YYYY-MM-DD
+        public string endtime { get; set; }     //结束时间，格式：YYYY-MM-DD
+        public string user { get; set; }        //用户名或用户ID
+    }
 
+    /// <summary>
+    /// 重置密码
+    /// 所有属性继承删除用户类，JsonObjDeleteUser
+    /// </summary>
     public class JsonObjResetUserPwd : JsonRequest
     { }
 
-    public class JsonObjUpdatePwd : JsonRequest
+
+    public class JsonObjGetUser : JsonRequest
+    {
+        public string user { get; set; }        //用户ID/用户名/角色名，等于空字符串时查询所有用户
+        public string flag { get; set; }        //1-winform,0或空查询所有权限   
+        public string isexact { get; set; }     //1-精确查询，0-模糊查询
+    }
+
+    /// <summary>
+    /// 修改用户密码
+    /// 所有属性继承用户登录类，JsonObjDeleteUserary>
+    public class JsonObjUpdatePwd : JsonObjUserLogin
     { }
 
-    public class JsonObjBindUserRole : JsonRequest
-    { }
-
-
+    /// <summary>
+    /// 绑定用户角色
+    /// 额外指定角色列表，用户ID属性继承JsonObjDeleteUser类
+    /// </summary>
+    public class JsonObjBindUserRole : JsonObjDeleteUser
+    {
+        public arrayUser array { get; set; }    //角色列表
+    }
     #endregion
 
     #region Json ACK

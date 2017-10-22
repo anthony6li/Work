@@ -402,7 +402,6 @@ namespace Util
                     default:
                         break;
                 }
-
                 temp = ConvertJsonString(tempJsonStr);
                 return temp;
             }
@@ -413,7 +412,7 @@ namespace Util
         }
 
         /// <summary>
-        /// 格式化json字符串
+        /// 格式化json字符串，添加 "\r\n"
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
