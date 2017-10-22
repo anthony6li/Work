@@ -109,35 +109,10 @@ namespace JsonTestServer
     {
         // 系统版本和运行情况
         public string method { get; set; }
-        
-        #region 中央存储服务器(CVR)
-        public string starttime { get; set; } //通道号
-        public string savepath { get; set; }   //ftp保存路径
-        public string savename { get; set; }   //录像保存文件名
-        public string downhandle { get; set; }   //下载标记
-        public string cmd { get; set; }   //云台控制 命令
-        public string speed { get; set; }   //云台控制  速度
-        public string index { get; set; }   //预置点序号
-        #endregion
-
-        #region 门禁
-        public string doorcard { get; set; }   //门禁主机名或ID
-        public string cardreader { get; set; }   //门禁读卡器名或ID
-        #endregion
-
-        #region 电源时序器
-        public string sequencer { get; set; }   //电源时序器
-        public string sequencerid { get; set; }   //电源时序器ID
-        public string bsotype { get; set; }   //业务模块类型
-        public string openorder { get; set; }   //启动顺序
-        public string closeorder { get; set; }   //关闭顺序
-        #endregion
 
         #region 房间操作
         //public string areaid { get; set; }   //房间ID
-        public string areaname { get; set; }   //房间名
-        public string areatype { get; set; }   //房间类型
-        public string area { get; set; }   //房间ID或房间名
+
         #endregion
 
         #region 用户管理
@@ -330,30 +305,6 @@ namespace JsonTestServer
     public class JsonObjDelDevice : JsonRequest
     {
         public string deviceid { get; set; }
-
-
-        //public HedaACK m_hedaAck = new HedaACK();
-        ///// <summary>
-        ///// 返回的正确应答格式
-        ///// </summary>
-        //public HedaACK hedaAck
-        //{
-        //    get
-        //    {
-        //        m_hedaAck.Body = new Body()
-        //        {
-        //            retCode = "0",
-        //            retMsg = "设备删除成功"
-        //        };
-        //        m_hedaAck.Header = new Header()
-        //        {
-        //            MessageType = "MSG_SC_DEICE_ACT_ACK",
-        //            Version = "1.0"
-        //        };
-        //        return m_hedaAck;
-        //    }
-        //    set { m_hedaAck = value; }
-        //}
     }
 
     /// <summary>
@@ -623,83 +574,252 @@ namespace JsonTestServer
         public string state { get; set; }   //状态，1-启用，0-关闭
     }
 
+    /// <summary>
+    /// 获取设备供应商
+    /// </summary>
     public class JsonObjCVRSupplier : JsonRequest
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
+
+    /// <summary>
+    /// 中央存储通道与摄像头绑定
+    /// 绑定需要指定摄像头和通道号，继承JsonObjGetCVRCamera
+    /// </summary>
+    public class JsonObjBindCVRCamera : JsonObjGetCVRCamera
+    {
+        public string channel { set; get; }     //通道号
+    }
+
+    /// <summary>
+    /// 查询中央存储通道与摄像头绑定信息
+    /// 需要指定摄像头，继承JsonObjCVRSupplier
+    /// </summary>
+    public class JsonObjGetCVRCamera : JsonObjCVRSupplier
+    {
+        public string cameraid { get; set; }    //摄像头ID
+    }
+
+    /// <summary>
+    /// 删除中央存储通道与摄像头绑定信息
+    /// 删除需要和查询指定相同参数，属性一致直接继承JsonObjGetCVRCamera即可
+    /// </summary>
+    public class JsonObjDeleteCVRCamera : JsonObjGetCVRCamera
     { }
 
-    public class JsonObjBindCVRCamera : JsonRequest
+    /// <summary>
+    /// 查询录像文件列表
+    /// 在查询绑定信息之后，额外指定开始和结束时间。继承查询类 JsonObjGetCVRCamera
+    /// </summary>
+    public class JsonObjGetCVRFileList : JsonObjGetCVRCamera
+    {
+        public string starttime { get; set; }   //开始时间
+        public string endtime { get; set; }     //结束时间
+    }
+
+    /// <summary>
+    /// 开始下载录像文件
+    /// 获取列表后，指定路径和文件名即可下载，继承JsonObjGetCVRFileList查询录像文件列表类
+    /// </summary>
+    public class JsonObjStartDownloadFile : JsonObjGetCVRFileList
+    {
+        public string savepath { get; set; }   //ftp保存路径
+        public string savename { get; set; }   //录像保存文件名
+    }
+
+    /// <summary>
+    /// 获取下载进度
+    /// 指定下载标记，其它属性继承JsonObjGetCVRCamera
+    /// </summary>
+    public class JsonObjGetDownloadPos : JsonObjGetCVRCamera
+    {
+        public string downhandle { get; set; }   //下载标记
+    }
+
+    /// <summary>
+    /// 停止下载
+    /// 所有属性与获取下载进度类相同，继承JsonObjGetDownloadPos
+    /// </summary>
+    public class JsonObjStopDownload : JsonObjGetDownloadPos
     { }
 
-    public class JsonObjGetCVRCamera : JsonRequest
-    { }
-
-    public class JsonObjGetCVRFileList : JsonRequest
-    { }
-
-    public class JsonObjStartDownloadFile : JsonRequest
-    { }
-
-    public class JsonObjGetDownloadPos : JsonRequest
-    { }
-
-    public class JsonObjStopDownload : JsonRequest
-    { }
-
+    /// <summary>
+    /// 开始下载房间所有指定时间内录像文件
+    /// </summary>
     public class JsonObjStartDownloadAreaFile : JsonRequest
-    { }
+    {
+        public string areaid { get; set; }  //房间ID
+        public string starttime { get; set; }   //开始时间
+        public string endtime { get; set; }     //结束时间
+        public string savepath { get; set; }   //ftp保存路径
+    }
 
-    public class JsonObjPTZControl : JsonRequest
-    { }
+    /// <summary>
+    /// 云台控制
+    /// 命令，速度和开始关闭标记需要相应属性，继承JsonObjGetCVRCamera
+    /// </summary>
+    public class JsonObjPTZControl : JsonObjGetCVRCamera
+    {
+        public string cmd { get; set; }   //云台控制 命令
+        public string speed { get; set; }   //云台控制  速度
+        public string flag { get; set; }   //开始关闭标记
+    }
 
-    public class JsonObjPTZPreset : JsonRequest
-    { }
+    /// <summary>
+    /// 预置点控制
+    /// 指定命令和预置点序号，其它属性继承JsonObjGetCVRCamera
+    /// </summary>
+    public class JsonObjPTZPreset : JsonObjGetCVRCamera
+    {
+        public string cmd { get; set; }   //云台控制 命令
+        public string index { get; set; }   //预置点序号
 
+    }
+
+    /// <summary>
+    /// 获取解码器设备供应商
+    /// </summary>
     public class JsonObjDecoderSupplier : JsonRequest
-    { }
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
 
+    /// <summary>
+    /// 获取门禁设备供应商
+    /// </summary>
     public class JsonObjDoorCardSupplier : JsonRequest
-    { }
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
 
+    /// <summary>
+    /// 查询刷卡记录
+    /// </summary>
     public class JsonObjGetDoorCardLog : JsonRequest
-    { }
+    {
+        public string begtime { get; set; } //开始时间
+        public string endtime { get; set; } //结束时间
+        public string cardid { get; set; }  //门卡ID
+        public string user { get; set; }    //刷卡用户名或ID
+        public string area { get; set; }    //房间名或ID
+        public string doorcard { get; set; }   //门禁主机名或ID
+        public string cardreader { get; set; }   //门禁读卡器名或ID
+    }
 
+    /// <summary>
+    /// 获取网络键盘设备供应商
+    /// </summary>
     public class JsonObjNetKeySupplier : JsonRequest
-    { }
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
 
+    /// <summary>
+    /// 获取电源时序器设备供应商
+    /// </summary>
     public class JsonObjPSSupplier : JsonRequest
-    { }
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
 
+    /// <summary>
+    /// 获取电源时序器启动配置信息
+    /// </summary>
     public class JsonObjGetSequencerConf : JsonRequest
-    { }
+    {
+        public string area { get; set; }    //房间
+        public string sequencer { get; set; }   //电源时序器
+    }
 
+    /// <summary>
+    /// 添加电源时序器启动配置信息
+    /// </summary>
     public class JsonObjSequencerConf : JsonRequest
-    { }
+    {
+        public string areaid { get; set; }  //房间ID
+        public string sequencerid { get; set; }   //电源时序器ID
+        public string bsotype { get; set; }   //业务模块类型
+        public string openorder { get; set; }   //启动顺序
+        public string closeorder { get; set; }   //关闭顺序
+    }
 
+    /// <summary>
+    /// 删除电源时序器启动配置信息
+    /// </summary>
     public class JsonObjDeleteSequencerConf : JsonRequest
-    { }
+    {
+        public string areaid { get; set; }  //房间ID
+        public string sequencerid { get; set; }   //电源时序器ID
+        public string bsotype { get; set; } //业务模块类型
+    }
 
+    /// <summary>
+    /// 获取同步录音录像设备供应商
+    /// </summary>
     public class JsonObjSyncRecordSupplier : JsonRequest
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
+
+    /// <summary>
+    /// 同录设备通道与摄像头绑定
+    /// 指定通道进行绑定，其它属性继承JsonObjGetSyncRecordCamera
+    /// </summary>
+    public class JsonObjBindSyncRecordCamera : JsonObjGetSyncRecordCamera
+    {
+        public string channel { get; set; }     //通道号
+    }
+
+    /// <summary>
+    /// 查询同录通道与摄像头绑定信息
+    /// </summary>
+    public class JsonObjGetSyncRecordCamera : JsonObjSyncRecordSupplier
+    {
+        public string cameraid { get; set; }    //摄像头ID 
+    }
+
+    /// <summary>
+    /// 删除同录通道与摄像头绑定信息
+    /// 继承查询Obj类 JsonObjGetSyncRecordCamera
+    /// </summary>
+    public class JsonObjDeleteSyncRecordCamera : JsonObjGetSyncRecordCamera
     { }
 
-    public class JsonObjBindSyncRecordCamera : JsonRequest
-    { }
-
-    public class JsonObjGetSyncRecordCamera : JsonRequest
-    { }
-
-    public class JsonObjDeleteSyncRecordCamera : JsonRequest
-    { }
-
+    /// <summary>
+    /// 添加房间
+    /// </summary>
     public class JsonObjAddArea : JsonRequest
-    { }
+    {
+        public string areaname { get; set; }   //房间名
+        public string areatype { get; set; }   //房间类型
+        public string note { get; set; }    //备注
+    }
 
+    /// <summary>
+    /// 删除房间
+    /// </summary>
     public class JsonObjDelArea : JsonRequest
-    { }
+    {
+        public string areaid { get; set; }  //房间ID
+    }
 
-    public class JsonObjUpdateArea : JsonRequest
-    { }
+    /// <summary>
+    /// 修改房间
+    /// 指定房间ID，其它属性继承JsonObjAddArea
+    /// </summary>
+    public class JsonObjUpdateArea : JsonObjAddArea
+    {
+        public string areaid { get; set; }  //房间ID
+    }
 
+    /// <summary>
+    /// 查询房间
+    /// </summary>
     public class JsonObjGetArea : JsonRequest
-    { }
+    {
+        public string area { get; set; }    //房间ID或者房间名
+        public string isexact { get; set; } //精确查找标记
+    }
 
     public class JsonObjBindAreaDevice : JsonRequest
     { }
