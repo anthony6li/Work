@@ -19,7 +19,7 @@
 				<Node Name="BatAddDeviceFromIP" Text="IP段添加" />
 				<Node Name="BatAddDeviceFromXml" Text="xml配置导入摄像头" />
 				<Node Name="BatPingDevice" Text="测试设备是否连接" />
-				<Node Name="BatAddDeviceImportXML" Text="导入设备xml" />
+				<Node Name="BatAddDeviceImport" Text="导入设备xml" />
 				<Node Name="SaveDevFile" Text="导出设备xml" />
 			</Node>
 		</Node>
@@ -91,7 +91,7 @@
 		<Node Name="UserLogSearch" Text="用户日志查询" />
 		<Node Name="CheckUserID" Text="校验用户ID" />
 		<Node Name="ResetUserPwd" Text="重置密码" />
-		<Node Name="获取所有用户" Text="GetUser" />
+		<Node Name="GetUser" Text="获取所有用户" />
 		<Node Name="UpdatePwd" Text="修改用户密码" />
 		<Node Name="BindUserRole" Text="绑定用户角色" />
 	</Node>

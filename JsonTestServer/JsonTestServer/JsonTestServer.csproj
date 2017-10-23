@@ -88,9 +88,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\TreeXml.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resource\TreeXml.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

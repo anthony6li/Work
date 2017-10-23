@@ -29,6 +29,7 @@ namespace JsonTestServer
         CameraSearch,   //查询摄像头/麦克风
         BatAddDeviceFromIP,   //摄像头批量处理-IP段添加
         BatAddDeviceFromXml,   //摄像头批量处理-IP段添加
+        BatAddDeviceImport,
         BatPingDevice,  //摄像头批量处理-测试设备是否连接
         SaveDevFile,    //摄像头批量处理-导出设备xml
         AlarmSupplier,  //获取“报警主机”设备供应商
@@ -164,31 +165,11 @@ namespace JsonTestServer
     /// </summary>
     public class JsonObjRunStatus : JsonRequest
     {
-        //public HedaACK m_hedaAck = new HedaACK();
-        ///// <summary>
-        ///// 返回的正确应答格式
-        ///// </summary>
-        //public HedaACK hedaAck
-        //{
-        //    get
-        //    {
-        //        m_hedaAck.Body  = new Body()
-        //        {
-        //            cpu_percent = "0",
-        //            mem_percent = "0",
-        //            mem_usage = "47.8MB",
-        //            retCode = "0",
-        //            retMsg = "系统信息查询成功"
-        //        };
-        //        m_hedaAck.Header = new Header()
-        //        {
-        //            MessageType = "MSG_SG_SYSTEM_INFO_ACK",
-        //            Version = "1.0"
-        //        };
-        //        return m_hedaAck;
-        //    }
-        //    set { m_hedaAck = value; }
-        //}
+    }
+
+    public class JsonObjDeviceId : JsonRequest
+    {
+        public string deviceid { get; set; }
     }
 
     /// <summary>
@@ -358,8 +339,9 @@ namespace JsonTestServer
     /// </summary>
     public class JsonObjUpdateDevice : JsonRequest
     {
+        public string deviceid { get; set; }    //设备ID
         public string devicetype { get; set; }  //设备类型
-        public string devicename { get; set; }  //设备名
+        //public string devicename { get; set; }  //设备名
         public string name { get; set; }   //绑定设备ID
         public string ip { get; set; }  //设备IP
         public string port { get; set; }    //设备端口
@@ -400,6 +382,7 @@ namespace JsonTestServer
     /// </summary>
     public class JsonObjUpdateCamera : JsonRequest
     {
+        public string deviceid { get; set; }    //设备ID
         public string devicetype { get; set; }  //设备类型
         public string devicename { get; set; }  //设备名
         public string bindid { get; set; }   //绑定设备ID
@@ -521,6 +504,7 @@ namespace JsonTestServer
     public class JsonObjBindAlarmCamera : JsonRequest
     {
         public string alarmid { get; set; }   //报警主机ID
+        public string areaid { get; set; }   //房间ID
         public string cameraid { get; set; }   //摄像头ID
         public string alarm_in_channel { get; set; }   //报警主机输入口
         public string alarm_out_channel { get; set; }   //报警主机输出口
@@ -840,7 +824,15 @@ namespace JsonTestServer
     /// </summary>
     public class JsonObjBindAreaDevice : JsonObjGetAreaDevice
     {
-        public arrayArea array { get; set; }    //
+        private List<arrayArea> m_array = new List<arrayArea>();
+        public List<arrayArea> array
+        {
+            get { return m_array; }
+            set
+            {
+                array = value;
+            }
+        }    //
     }
 
     /// <summary>
@@ -878,8 +870,9 @@ namespace JsonTestServer
         public string telephone { get; set; }   //办公室电话
         public string mobile { get; set; }      //移动电话
         public string email { get; set; }   //电子邮件
-       // public string roleid { get; set; }   //角色ID
-        public arrayUser array { get; set; }    //角色列表，可以没有此属性
+                                            // public string roleid { get; set; }   //角色ID
+        private List<arrayUser> aa = new List<arrayUser>();
+        public List<arrayUser> array { get { return aa; } set { } }    //角色列表，可以没有此属性
     }
 
     /// <summary>
@@ -944,7 +937,9 @@ namespace JsonTestServer
     /// 修改用户密码
     /// 所有属性继承用户登录类，JsonObjDeleteUserary>
     public class JsonObjUpdatePwd : JsonObjUserLogin
-    { }
+    {
+        public string oldpwd { get; set;}   //旧密码
+    }
 
     /// <summary>
     /// 绑定用户角色
@@ -952,7 +947,7 @@ namespace JsonTestServer
     /// </summary>
     public class JsonObjBindUserRole : JsonObjDeleteUser
     {
-        public arrayUser array { get; set; }    //角色列表
+        public List<arrayUser> array { get; set; }    //角色列表
     }
     #endregion
 

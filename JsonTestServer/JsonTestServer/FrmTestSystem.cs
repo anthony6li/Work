@@ -13,6 +13,8 @@ namespace JsonTestServer
 {
     public partial class FrmTestSystem : Form
     {
+        const string EXPAND = "Expand Tree";
+        const string COLLAPSE = "Collapse Tree";
         HttpUtil htmlUtil = new HttpUtil();
         XmlDocument doc = new XmlDocument();
         StringBuilder sb = new StringBuilder();
@@ -32,6 +34,10 @@ namespace JsonTestServer
             //doc.Load(Properties.Resources.TreeXml); 
             RecursionTreeControl(doc.DocumentElement, tv_Method.Nodes);//将加载完成的XML文件显示在TreeView控件
             tv_Method.ExpandAll();
+            if (tv_Method.Nodes[0] != null)
+            {
+                tv_Method.TopNode = tv_Method.Nodes[0];
+            }
         }
 
         private void btn_POST_Click(object sender, EventArgs e)
@@ -95,7 +101,15 @@ namespace JsonTestServer
                 if (Enum.IsDefined(typeof(JsonMethodType), e.Node.Name))
                 {
                     string temp = htmlUtil.JsonObjectCreator(e.Node.Name);
-                    this.rtb_Data.Text = temp;
+                    if ((temp.StartsWith("http://")&&temp.EndsWith(JsonRequestType.upload.ToString())))
+                    {
+                        this.rtb_Data.Text = "请访问：\r\n";
+                        this.rtb_Data.Text += string.Format(temp, this.Tb_IP.Text, this.Tb_Port.Text);
+                    }
+                    else
+                    {
+                        this.rtb_Data.Text = temp;
+                    }
                 }
                 else
                 {
@@ -104,7 +118,7 @@ namespace JsonTestServer
             }
             else
             {
-                this.rtb_Data.Text = string.Empty;
+                this.rtb_Data.Text = string.Format("请选择【{0}】的子节点获取请求Json模板。",e.Node.Text);
             }
         }
 
@@ -134,13 +148,12 @@ namespace JsonTestServer
                 StreamWriter sr = new StreamWriter("TreeXml.xml", false, System.Text.Encoding.UTF8);
                 sr.Write(sb.ToString());
                 sr.Close();
-                //toolStripStatusLabel1.Text = "保存成功";
             }
             catch (Exception ex)
             {
-                //toolStripStatusLabel1.Text = ex.Message;
             }
         }
+        
         //递归遍历节点内容,最关键的函数
         private void parseNode(TreeNode tn, StringBuilder sb)
         {
@@ -183,6 +196,28 @@ namespace JsonTestServer
                 new_child.Text = node.Attributes["Text"].Value;
                 nodes.Add(new_child);//向当前TreeNodeCollection集合中添加当前节点
                 RecursionTreeControl(node, new_child.Nodes);//调用本方法进行递归
+            }
+        }
+
+        private void btn_Expand_Click(object sender, EventArgs e)
+        {
+            object locker = new object();
+            lock (locker)
+            {
+                if (string.Equals(this.btn_Expand.Text, COLLAPSE))
+                {
+                    tv_Method.CollapseAll();
+                    btn_Expand.Text = EXPAND;
+                }
+                else if (string.Equals(this.btn_Expand.Text, EXPAND))
+                {
+                    tv_Method.ExpandAll();
+                    if (tv_Method.Nodes[0] != null)
+                    {
+                        tv_Method.TopNode = tv_Method.Nodes[0];
+                        btn_Expand.Text = COLLAPSE;
+                    }
+                }
             }
         }
     }

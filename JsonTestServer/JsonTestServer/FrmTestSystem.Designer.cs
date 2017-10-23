@@ -46,12 +46,13 @@
             this.lb_RequestType = new System.Windows.Forms.Label();
             this.cb_Request = new System.Windows.Forms.ComboBox();
             this.btb_SaveNodesToXml = new System.Windows.Forms.Button();
+            this.btn_Expand = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Lbl_IP
             // 
             this.Lbl_IP.AutoSize = true;
-            this.Lbl_IP.Location = new System.Drawing.Point(252, 13);
+            this.Lbl_IP.Location = new System.Drawing.Point(299, 8);
             this.Lbl_IP.Name = "Lbl_IP";
             this.Lbl_IP.Size = new System.Drawing.Size(17, 12);
             this.Lbl_IP.TabIndex = 1;
@@ -60,7 +61,7 @@
             // Lbl_Port
             // 
             this.Lbl_Port.AutoSize = true;
-            this.Lbl_Port.Location = new System.Drawing.Point(420, 9);
+            this.Lbl_Port.Location = new System.Drawing.Point(500, 4);
             this.Lbl_Port.Name = "Lbl_Port";
             this.Lbl_Port.Size = new System.Drawing.Size(29, 12);
             this.Lbl_Port.TabIndex = 2;
@@ -68,15 +69,15 @@
             // 
             // Tb_IP
             // 
-            this.Tb_IP.Location = new System.Drawing.Point(254, 26);
+            this.Tb_IP.Location = new System.Drawing.Point(301, 21);
             this.Tb_IP.Name = "Tb_IP";
-            this.Tb_IP.Size = new System.Drawing.Size(151, 21);
+            this.Tb_IP.Size = new System.Drawing.Size(195, 21);
             this.Tb_IP.TabIndex = 3;
             this.Tb_IP.Text = "10.10.1.77";
             // 
             // Tb_Port
             // 
-            this.Tb_Port.Location = new System.Drawing.Point(422, 26);
+            this.Tb_Port.Location = new System.Drawing.Point(502, 21);
             this.Tb_Port.Name = "Tb_Port";
             this.Tb_Port.Size = new System.Drawing.Size(52, 21);
             this.Tb_Port.TabIndex = 4;
@@ -84,13 +85,15 @@
             // 
             // tv_Method
             // 
+            this.tv_Method.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.tv_Method.FullRowSelect = true;
             this.tv_Method.ImageKey = "folder.png";
             this.tv_Method.ImageList = this.imageList1;
-            this.tv_Method.Location = new System.Drawing.Point(13, 13);
+            this.tv_Method.Location = new System.Drawing.Point(13, 39);
             this.tv_Method.Name = "tv_Method";
             this.tv_Method.SelectedImageIndex = 0;
-            this.tv_Method.Size = new System.Drawing.Size(229, 449);
+            this.tv_Method.Size = new System.Drawing.Size(229, 463);
             this.tv_Method.TabIndex = 8;
             this.tv_Method.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tv_Method_AfterCollapse);
             this.tv_Method.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tv_Method_AfterExpand);
@@ -110,7 +113,7 @@
             // lb_Data
             // 
             this.lb_Data.AutoSize = true;
-            this.lb_Data.Location = new System.Drawing.Point(254, 69);
+            this.lb_Data.Location = new System.Drawing.Point(248, 52);
             this.lb_Data.Name = "lb_Data";
             this.lb_Data.Size = new System.Drawing.Size(41, 12);
             this.lb_Data.TabIndex = 9;
@@ -118,16 +121,16 @@
             // 
             // rtb_Data
             // 
-            this.rtb_Data.Location = new System.Drawing.Point(256, 84);
+            this.rtb_Data.Location = new System.Drawing.Point(250, 67);
             this.rtb_Data.Name = "rtb_Data";
-            this.rtb_Data.Size = new System.Drawing.Size(376, 157);
+            this.rtb_Data.Size = new System.Drawing.Size(461, 187);
             this.rtb_Data.TabIndex = 10;
             this.rtb_Data.Text = "";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(256, 258);
+            this.label1.Location = new System.Drawing.Point(248, 270);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 11;
@@ -135,17 +138,19 @@
             // 
             // rtb_ACK
             // 
-            this.rtb_ACK.Location = new System.Drawing.Point(258, 274);
+            this.rtb_ACK.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtb_ACK.Location = new System.Drawing.Point(248, 285);
             this.rtb_ACK.Name = "rtb_ACK";
-            this.rtb_ACK.Size = new System.Drawing.Size(374, 188);
+            this.rtb_ACK.Size = new System.Drawing.Size(463, 217);
             this.rtb_ACK.TabIndex = 12;
             this.rtb_ACK.Text = "";
             // 
             // btn_POST
             // 
-            this.btn_POST.Location = new System.Drawing.Point(386, 245);
+            this.btn_POST.Location = new System.Drawing.Point(326, 256);
             this.btn_POST.Name = "btn_POST";
-            this.btn_POST.Size = new System.Drawing.Size(52, 23);
+            this.btn_POST.Size = new System.Drawing.Size(67, 23);
             this.btn_POST.TabIndex = 13;
             this.btn_POST.Text = "POST";
             this.btn_POST.UseVisualStyleBackColor = true;
@@ -153,9 +158,9 @@
             // 
             // btn_POST8
             // 
-            this.btn_POST8.Location = new System.Drawing.Point(467, 245);
+            this.btn_POST8.Location = new System.Drawing.Point(420, 256);
             this.btn_POST8.Name = "btn_POST8";
-            this.btn_POST8.Size = new System.Drawing.Size(76, 23);
+            this.btn_POST8.Size = new System.Drawing.Size(100, 23);
             this.btn_POST8.TabIndex = 13;
             this.btn_POST8.Text = "POST(utf8)";
             this.btn_POST8.UseVisualStyleBackColor = true;
@@ -163,9 +168,9 @@
             // 
             // btn_GET
             // 
-            this.btn_GET.Location = new System.Drawing.Point(560, 245);
+            this.btn_GET.Location = new System.Drawing.Point(551, 256);
             this.btn_GET.Name = "btn_GET";
-            this.btn_GET.Size = new System.Drawing.Size(58, 23);
+            this.btn_GET.Size = new System.Drawing.Size(82, 23);
             this.btn_GET.TabIndex = 13;
             this.btn_GET.Text = "GET";
             this.btn_GET.UseVisualStyleBackColor = true;
@@ -174,7 +179,7 @@
             // lb_RequestType
             // 
             this.lb_RequestType.AutoSize = true;
-            this.lb_RequestType.Location = new System.Drawing.Point(490, 9);
+            this.lb_RequestType.Location = new System.Drawing.Point(567, 4);
             this.lb_RequestType.Name = "lb_RequestType";
             this.lb_RequestType.Size = new System.Drawing.Size(53, 12);
             this.lb_RequestType.TabIndex = 14;
@@ -188,15 +193,15 @@
             "api/hedajwreq",
             "api/hedacmdreq",
             "xml/upload"});
-            this.cb_Request.Location = new System.Drawing.Point(492, 26);
+            this.cb_Request.Location = new System.Drawing.Point(569, 21);
             this.cb_Request.Name = "cb_Request";
-            this.cb_Request.Size = new System.Drawing.Size(121, 20);
+            this.cb_Request.Size = new System.Drawing.Size(140, 20);
             this.cb_Request.TabIndex = 15;
             this.cb_Request.Text = "api/hedajwreq";
             // 
             // btb_SaveNodesToXml
             // 
-            this.btb_SaveNodesToXml.Location = new System.Drawing.Point(376, 55);
+            this.btb_SaveNodesToXml.Location = new System.Drawing.Point(13, 10);
             this.btb_SaveNodesToXml.Name = "btb_SaveNodesToXml";
             this.btb_SaveNodesToXml.Size = new System.Drawing.Size(75, 23);
             this.btb_SaveNodesToXml.TabIndex = 16;
@@ -204,11 +209,22 @@
             this.btb_SaveNodesToXml.UseVisualStyleBackColor = true;
             this.btb_SaveNodesToXml.Click += new System.EventHandler(this.btb_SaveNodesToXml_Click);
             // 
+            // btn_Expand
+            // 
+            this.btn_Expand.Location = new System.Drawing.Point(95, 10);
+            this.btn_Expand.Name = "btn_Expand";
+            this.btn_Expand.Size = new System.Drawing.Size(97, 23);
+            this.btn_Expand.TabIndex = 17;
+            this.btn_Expand.Text = "Collapse Tree";
+            this.btn_Expand.UseVisualStyleBackColor = true;
+            this.btn_Expand.Click += new System.EventHandler(this.btn_Expand_Click);
+            // 
             // FrmTestSystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(644, 474);
+            this.ClientSize = new System.Drawing.Size(720, 514);
+            this.Controls.Add(this.btn_Expand);
             this.Controls.Add(this.btb_SaveNodesToXml);
             this.Controls.Add(this.cb_Request);
             this.Controls.Add(this.lb_RequestType);
@@ -249,6 +265,7 @@
         private System.Windows.Forms.ComboBox cb_Request;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button btb_SaveNodesToXml;
+        private System.Windows.Forms.Button btn_Expand;
     }
 }
 
