@@ -947,7 +947,7 @@ namespace JsonTestServer
     /// </summary>
     public class JsonObjBindUserRole : JsonObjDeleteUser
     {
-        public List<arrayUser> array { get; set; }    //角色列表
+        public List<arrayUser> array = new List<arrayUser>();    //角色列表
     }
     #endregion
 
