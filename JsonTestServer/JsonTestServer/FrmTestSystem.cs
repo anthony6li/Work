@@ -18,6 +18,13 @@ namespace JsonTestServer
         HttpUtil htmlUtil = new HttpUtil();
         XmlDocument doc = new XmlDocument();
         StringBuilder sb = new StringBuilder();
+        public enum requestStyle
+        {
+            detail,
+            sample
+        };
+
+        public requestStyle reqStyle = requestStyle.detail;
         //XML每行的内容
         private string xmlLine = "";
 
@@ -88,19 +95,25 @@ namespace JsonTestServer
             e.Node.SelectedImageIndex = 0;//指向关闭的图标
         }
 
-        private void tv_Method_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            //e.Node.ImageIndex = 2;
-            //e.Node.SelectedImageIndex = 2;//指向展开的图标
-        }
-
         private void tv_Method_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Node.Nodes.Count == 0)
             {
                 if (Enum.IsDefined(typeof(JsonMethodType), e.Node.Name))
                 {
-                    string temp = htmlUtil.JsonObjectCreator(e.Node.Name);
+                    string temp = string.Empty;
+                    //暂时支持Request为详情和用例两种样式
+                   switch(reqStyle)
+                        {
+                        case requestStyle.detail:
+                            temp = htmlUtil.JsonDetailStringCreator(e.Node.Name);
+                            break;
+                        case requestStyle.sample:
+                            temp = htmlUtil.JsonSampleStringCreator(e.Node.Name);
+                            break;
+                        default:
+                            break;
+                    }
                     if ((temp.StartsWith("http://")&&temp.EndsWith(JsonRequestType.upload.ToString())))
                     {
                         this.rtb_Data.Text = "请访问：\r\n";
@@ -219,6 +232,32 @@ namespace JsonTestServer
                     }
                 }
             }
+        }
+
+        private void rbt_Deteil_CheckedChanged(object sender, EventArgs e)
+        {
+            reqStyle = requestStyle.detail;
+        }
+
+        private void rbt_JsonSample_CheckedChanged(object sender, EventArgs e)
+        {
+            reqStyle = requestStyle.sample;
+        }
+
+        private void menu_CloseForm_Click(object sender, EventArgs e)
+        {
+            System.Environment.Exit(0);
+        }
+
+        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InfoForm infoForm = new InfoForm();
+            infoForm.FormBorderStyle = FormBorderStyle.None;
+            infoForm.TopLevel = false;
+            //this.pl_Info.Visible = true;
+            //this.pl_Info.Location = new System.Drawing.Point(0, 0);
+            //this.pl_Info.Dock = System.Windows.Forms.DockStyle.Fill;
+            //this.pl_Info.Controls.Add(infoForm);
         }
     }
 }
