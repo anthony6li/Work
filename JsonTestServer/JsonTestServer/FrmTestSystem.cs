@@ -36,6 +36,7 @@ namespace JsonTestServer
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
+            this.lb_Data.Text = string.Format("数据（{0}）：",rbt_Deteil.Text);
             this.tv_Method.ExpandAll();
             doc.Load("Resource\\TreeXml.xml");
             //doc.Load(Properties.Resources.TreeXml); 
@@ -99,35 +100,7 @@ namespace JsonTestServer
         {
             if (e.Node.Nodes.Count == 0)
             {
-                if (Enum.IsDefined(typeof(JsonMethodType), e.Node.Name))
-                {
-                    string temp = string.Empty;
-                    //暂时支持Request为详情和用例两种样式
-                   switch(reqStyle)
-                        {
-                        case requestStyle.detail:
-                            temp = htmlUtil.JsonDetailStringCreator(e.Node.Name);
-                            break;
-                        case requestStyle.sample:
-                            temp = htmlUtil.JsonSampleStringCreator(e.Node.Name);
-                            break;
-                        default:
-                            break;
-                    }
-                    if ((temp.StartsWith("http://")&&temp.EndsWith(JsonRequestType.upload.ToString())))
-                    {
-                        this.rtb_Data.Text = "请访问：\r\n";
-                        this.rtb_Data.Text += string.Format(temp, this.Tb_IP.Text, this.Tb_Port.Text);
-                    }
-                    else
-                    {
-                        this.rtb_Data.Text = temp;
-                    }
-                }
-                else
-                {
-                    this.rtb_Data.Text = string.Empty;
-                }
+                updateDateToRTB(e.Node.Name);
             }
             else
             {
@@ -135,39 +108,90 @@ namespace JsonTestServer
             }
         }
 
+        private void updateDateToRTB(string type)
+        {
+            if (Enum.IsDefined(typeof(JsonMethodType), type))
+            {
+                string temp = string.Empty;
+                //暂时支持Request为详情和用例两种样式
+                switch (reqStyle)
+                {
+                    case requestStyle.detail:
+                        temp = htmlUtil.JsonDetailStringCreator(type);
+                        break;
+                    case requestStyle.sample:
+                        temp = htmlUtil.JsonSampleStringCreator(type);
+                        break;
+                    default:
+                        break;
+                }
+                if ((temp.StartsWith("http://") && temp.EndsWith(JsonRequestType.upload.ToString())))
+                {
+                    this.rtb_Data.Text = "请访问：\r\n";
+                    this.rtb_Data.Text += string.Format(temp, this.Tb_IP.Text, this.Tb_Port.Text);
+                }
+                else
+                {
+                    this.rtb_Data.Text = temp;
+                }
+            }
+            else
+            {
+                this.rtb_Data.Text = string.Empty;
+            }
+        }
+
         private void btb_SaveNodesToXml_Click(object sender, EventArgs e)
         {
             try
             {
-                StringBuilder sb = new StringBuilder();
-                //写文件头部内容
-                //下面是生成RSS的OPML文件
-                sb.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                sb.Append("<Tree>");
-
-                //遍历根节点
-                foreach (TreeNode node in tv_Method.Nodes)
+                string localFilePath = "";
+                string fileNameExt = "";
+                string newFileName = "";
+                    string FilePath = "";
+                saveFileDialog1.Filter = "Xml files(*.xml)|*.xml|txt files(*.txt)|*.txt|All files(*.*)|*.*";
+                saveFileDialog1.FileName = "TreeXml";
+                saveFileDialog1.DefaultExt = "xml";
+                saveFileDialog1.AddExtension = true;
+                saveFileDialog1.RestoreDirectory = true;
+                DialogResult result = saveFileDialog1.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    xmlLine = GetRSSText(node);
-                    sb.Append(xmlLine);
+                    localFilePath = saveFileDialog1.FileName.ToString();
+                    fileNameExt = localFilePath.Substring(localFilePath.LastIndexOf("\\") + 1);
+                    FilePath = localFilePath.Substring(0, localFilePath.LastIndexOf("\\"));
+                    StringBuilder sb = new StringBuilder();
+                    //写文件头部内容
+                    //下面是生成RSS的OPML文件
+                    sb.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                    sb.Append("<Tree>");
+                    //遍历根节点
+                    foreach (TreeNode node in tv_Method.Nodes)
+                    {
+                        xmlLine = GetRSSText(node);
+                        sb.Append(xmlLine);
+                        //递归遍历节点
+                        parseNode(node, sb);
+                        sb.Append("</Node>");
+                    }
+                    sb.Append("</Tree>");
 
-                    //递归遍历节点
-                    parseNode(node, sb);
-
-                    sb.Append("</Node>");
+                    Stream fs = saveFileDialog1.OpenFile();
+                    StreamWriter sr = new StreamWriter(fs, System.Text.Encoding.UTF8);
+                    sr.Write(sb.ToString());
+                    sr.Close();
                 }
-                sb.Append("</Tree>");
-
-                StreamWriter sr = new StreamWriter("TreeXml.xml", false, System.Text.Encoding.UTF8);
-                sr.Write(sb.ToString());
-                sr.Close();
             }
             catch (Exception ex)
             {
             }
         }
-        
-        //递归遍历节点内容,最关键的函数
+
+        /// <summary>
+        /// 递归遍历节点内容,最关键的函数
+        /// </summary>
+        /// <param name="tn"></param>
+        /// <param name="sb"></param>
         private void parseNode(TreeNode tn, StringBuilder sb)
         {
             IEnumerator ie = tn.Nodes.GetEnumerator();
@@ -186,13 +210,17 @@ namespace JsonTestServer
             }
         }
 
-        //成生RSS节点的XML文本行
+        /// <summary>
+        /// 成生XML文本行
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private string GetRSSText(TreeNode node)
         {
             //根据Node属性生成XML文本
-            string rssText = "<Node Name=\"" + node.Name + "\" Text=\"" + node.Text + "\" >";
+            string tempText = "<Node Name=\"" + node.Name + "\" Text=\"" + node.Text + "\" >";
 
-            return rssText;
+            return tempText;
         }
 
         /// <summary>
@@ -212,6 +240,11 @@ namespace JsonTestServer
             }
         }
 
+        /// <summary>
+        /// 选中TreeView节点,返回相应的请求数据并更新至RichTextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_Expand_Click(object sender, EventArgs e)
         {
             object locker = new object();
@@ -234,30 +267,28 @@ namespace JsonTestServer
             }
         }
 
-        private void rbt_Deteil_CheckedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// 修改Json请求格式为Details
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rbt_JsonDeteil_CheckedChanged(object sender, EventArgs e)
         {
             reqStyle = requestStyle.detail;
+            updateDateToRTB(this.tv_Method.SelectedNode.Name);
+            lb_Data.Text = string.Format("数据（{0}）：",rbt_Deteil.Text);
         }
 
+        /// <summary>
+        /// 修改Json请求格式为Sample
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rbt_JsonSample_CheckedChanged(object sender, EventArgs e)
         {
             reqStyle = requestStyle.sample;
-        }
-
-        private void menu_CloseForm_Click(object sender, EventArgs e)
-        {
-            System.Environment.Exit(0);
-        }
-
-        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            InfoForm infoForm = new InfoForm();
-            infoForm.FormBorderStyle = FormBorderStyle.None;
-            infoForm.TopLevel = false;
-            //this.pl_Info.Visible = true;
-            //this.pl_Info.Location = new System.Drawing.Point(0, 0);
-            //this.pl_Info.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.pl_Info.Controls.Add(infoForm);
+            updateDateToRTB(this.tv_Method.SelectedNode.Name);
+            lb_Data.Text = string.Format("数据（{0}）：", rbt_JsonSample.Text);
         }
     }
 }

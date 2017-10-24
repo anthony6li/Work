@@ -7,46 +7,112 @@ using System.IO;
 
 namespace JsonTestServer
 {
+    #region enum        
     public enum JsonRequestType
     {
-        hedajwreq,      // "api/hedajwreq"
-        hedacmdreq,     // "api/" 摄像头批量处理
-        upload,         //  "xml/upload"
+        hedajwreq,          // "api/hedajwreq"
+        hedacmdreq,         // "api/hedacmdreq" 摄像头批量处理
+        upload,             //  "xml/upload"
+        sysinfo,            //"api/sysinfo"获取系统运行情况
     }
 
     public enum JsonMethodType
     {
-        Version,    //获取系统版本
-        RunStatus,  //获取系统运行情况
-        UserLogSearch,  //用户日志查询
-        AddDevice,  //添加对接设备
-        AddCamera,  //添加摄像头/麦克风
-        DelDevice,  //删除对接设备
-        DeleteCamera,   //删除摄像头/麦克风
-        UpdateDevice,   //修改对接设备
-        UpdateCamera,   //修改摄像头/麦克风
-        DeviceSearch,   //查询对接设备
-        CameraSearch,   //查询摄像头/麦克风
-        BatAddDeviceFromIP,   //摄像头批量处理-IP段添加
-        BatAddDeviceFromXml,   //摄像头批量处理-IP段添加
-        BatAddDeviceImport,
-        BatPingDevice,  //摄像头批量处理-测试设备是否连接
-        SaveDevFile,    //摄像头批量处理-导出设备xml
-        AlarmSupplier,  //获取“报警主机”设备供应商
+        Version,            //获取系统版本
+        RunStatus,          //获取系统运行状态
+        SysInfo,            //获取系统运行情况
+        UserLogSearch,      //用户日志查询
+        ///权限管理
+        AddPrivilege,       //添加权限
+        UpdatePrivilege,    //修改权限
+        DeletePrivilege,    //删除权限
+        RolePrivilege,      //获取指定角色的所有权限
+        PrivilegeDevice,    //根据权限查询所有设备
+        GetPrivilege,       // 获取所有权限
+        //角色管理
+        AddRole,            //添加角色  
+        UpdateRole,         //修改角色  
+        DeleteRole,         //删除角色   
+        UserRole,           //获取指定用户的所有角色  
+        GetRole,            //获取所有角色  
+        //下级平台管理
+        AddPlat,            //下级平台添加  
+        UpdatePlat,         //修改子平台  
+        DeletePlat,         //删除平台  
+        PlatList,           //获取平台列表  
+        PlatListExact,      //条件获取平台列表  
+        PlatInfo,           //获取当前平台信息  
+        //组管理
+        AddGroup,           //添加组
+        UpdateGroup,        //修改组
+        DeleteGroup,        //删除组
+        PlatGroup,          //获取平台下所有组
+        GroupSearch,        //组查询
+        //云台控制
+        KeepMove,           //移动
+        StopMove,           //停止移动
+        RltMove,            //相对移动
+        GetPresets,         //获取预置点
+        SetPresets,         //设置预置点
+        RemovePresets,      //删除预置点
+        GotoPresets,        //移动到预置点
+        //视频转发
+        RtspRelay,          //RTSP转发
+        RtspRelayBat,       //RTSP批量转发
+        TSFileRelay,        //录像文件回放
+        TSFileSeekPlay,     //回放进度调整
+        RmsFtpInfo,         //视频下载配置信息获取
+        DownloadFileList,   //DownloadFileList
+        GetRelayRtsp,       //获取设备转发地址(内部使用)
+        //计划任务
+        AddPlan,            //添加计划
+        UpdatePlan,         //修改计划
+        PlanSearch,         //查询计划
+        AllPlanSearch,      //查询所有计划
+        ExactPlanSearch,    //精确查询计划
+        DeletePlan,         //删除计划
+        ClosePlan,          //启动/关闭任务计划
+        BatAddPlan,         //批量添加计划任务
+        //视频预览
+        MP4Preview,         //视频预览
+        DevicePreview,      //视频预览(下级平台设备)
+        StopPreview,        //停止预览
+        //系统配置
+        GetRMSConf,         //获取录像服务器(RMS)配置
+        RMSConf,            //录像服务器(RMS)配置
+        GetDBConf,          //获取数据库配置
+        DBConf,             //数据库配置
+        CheckDB,            //测试数据库连接
+        ReStart,            //重启服务
+        //设备管理
+        AddDevice,          //添加对接设备
+        AddCamera,          //添加摄像头/麦克风
+        DelDevice,          //删除对接设备
+        DeleteCamera,       //删除摄像头/麦克风
+        UpdateDevice,       //修改对接设备
+        UpdateCamera,       //修改摄像头/麦克风
+        DeviceSearch,       //查询对接设备
+        CameraSearch,       //查询摄像头/麦克风
+        BatAddDeviceFromIP, //摄像头批量处理-IP段添加
+        BatAddDeviceFromXml,//摄像头批量处理-IP段添加
+        BatAddDeviceImport, //
+        BatPingDevice,      //摄像头批量处理-测试设备是否连接
+        SaveDevFile,        //摄像头批量处理-导出设备xml
+        AlarmSupplier,      //获取“报警主机”设备供应商
         BindAlarmCamera,    //报警主机和摄像头绑定
         RebindAlarmCamera,  //报警主机和摄像头解绑定
-        GetAlarmCamera, //查询报警主机和摄像头绑定信息
-        BASupplier,     //获取“行为分析服务器”设备供应商
-        BindBACamera,    //智能分析仪通道与摄像头绑定
-        GetBACamera,     //查询智能分析仪通道与摄像头绑定信息
+        GetAlarmCamera,     //查询报警主机和摄像头绑定信息
+        BASupplier,         //获取“行为分析服务器”设备供应商
+        BindBACamera,       //智能分析仪通道与摄像头绑定
+        GetBACamera,        //查询智能分析仪通道与摄像头绑定信息
         DeleteBACamera,     //删除智能分析仪通道与摄像头绑定信息
-        OpenBACamera,     //启用和关闭智能分析仪通道与摄像头绑定信息
-        CVRSupplier,     //获取“中央存储服务器(CVR)”设备供应商
-        BindCVRCamera,     //中央存储通道与摄像头绑定
-        GetCVRCamera,     //查询中央存储通道与摄像头绑定信息
-        DeleteCVRCamera,     //删除中央存储通道与摄像头绑定信息
+        OpenBACamera,       //启用和关闭智能分析仪通道与摄像头绑定信息
+        CVRSupplier,        //获取“中央存储服务器(CVR)”设备供应商
+        BindCVRCamera,      //中央存储通道与摄像头绑定
+        GetCVRCamera,       //查询中央存储通道与摄像头绑定信息
+        DeleteCVRCamera,    //删除中央存储通道与摄像头绑定信息
         GetCVRFileList,     //查询录像文件列表
-        StartDownloadFile,     //开始下载录像文件
+        StartDownloadFile,  //开始下载录像文件
         GetDownloadPos,     //获取下载进度
         StopDownload,     //停止下载
         StartDownloadAreaFile,     //开始下载房间所有指定时间内录像文件
@@ -82,18 +148,14 @@ namespace JsonTestServer
         GetUser,     //获取所有用户
         UpdatePwd,     //修改用户密码
         BindUserRole,     //绑定用户角色
+        //数据同步
+        AllDataSync,        //同步所有数据(内部使用)
+        DataSync,           //同步部分数据(内部使用)
+        ReqDataSync,        //父平台向下级请求同步数据(内部使用)
     }
+    #endregion
 
-    /// <summary>
-    /// 所有模块的请求都需要指定method，指定为父类
-    /// </summary>
-    public class JsonRequest
-    {
-        // 系统版本和运行情况
-        public string method { get; set; }
-    }
-
-    #region JsonRequestObjects
+    #region Struct
     /// <summary>
     /// IP导入摄像头时,指定IP
     /// </summary>
@@ -139,6 +201,86 @@ namespace JsonTestServer
     {
         public string roleid;
     }
+
+    /// <summary>
+    /// 添加权限时的设备集合
+    /// </summary>
+    public struct arrayPrivilege
+    {
+        public string deviceid;
+        public string devicename;
+    }
+
+    /// <summary>
+    /// 添加角色时的权限集合
+    /// </summary>
+    public struct arrayRole
+    {
+        public string privilegeid;
+        public string privilegename;
+    }
+
+    public struct arrayPlan
+    {
+        public string deviceid;
+        public string planname;
+    }
+
+    public struct arrayDataSync1
+    {
+        public string bsoid;
+        public string createtime;
+        public string updatetime;
+        public string platformid;
+        public string platformname;
+        public string parentplatformid;
+        public string childplatformid;
+        public string ip;
+        public string port;
+        public string lvl;
+    }
+    public struct arrayDataSync2
+    {
+        public string bsoid;
+        public string createtime;
+        public string updatetime;
+        public string groupid;
+        public string groupname;
+        public string parentgroup;
+        public string platformID;
+
+    }
+    public struct arrayDataSync3
+    {
+        public string bsoid;
+        public string createtime;
+        public string updatetime;
+        public string deviceid;
+        public string devicetype;
+        public string devicegroup;
+        public string owendplatform;
+        public string correlation;
+        public string devicename;
+        public string deviceloginname;
+        public string deviceloginpassword;
+        public string serverIP;
+        public string RTSPport;
+        public string flag;
+        public string devicestate;
+        public string devicenote;
+    }
+    #endregion
+
+    #region JsonRequestObjects
+    /// <summary>
+    /// 所有模块的请求都需要指定method，指定为父类
+    /// </summary>
+    public class JsonRequest
+    {
+        // 系统版本和运行情况
+        public string method { get; set; }
+    }
+
     /// <summary>
     /// 获取系统版本，该子类无特有属性
     /// </summary>
@@ -181,32 +323,6 @@ namespace JsonTestServer
         public string begtime { get; set; } //开始时间
         public string endtime { get; set; } //结束时间
         public string user { get; set; }    //用户信息、设备登录用户
-
-        //public HedaACK m_hedaAck = new HedaACK();
-        ///// <summary>
-        ///// 返回的正确应答格式
-        ///// </summary>
-        //public HedaACK HedaAck
-        //{
-        //    get
-        //    {
-        //        m_hedaAck.Body = new Body()
-        //        {
-        //            cpu_percent = "0",
-        //            mem_percent = "0",
-        //            mem_usage = "47.8MB",
-        //            retCode = "0",
-        //            retMsg = "系统信息查询成功"
-        //        };
-        //        m_hedaAck.Header = new Header()
-        //        {
-        //            MessageType = "MSG_SG_USER_MGR_ACK",
-        //            Version = "1.0"
-        //        };
-        //        return m_hedaAck;
-        //    }
-        //    set { m_hedaAck = value; }
-        //}
     }
 
     /// <summary>
@@ -864,7 +980,7 @@ namespace JsonTestServer
     /// 修改用户(包括权限)
     /// </summary>
     public class JsonObjUpdateUser : JsonRequest
-    { 
+    {
         public string userid { get; set; }   //用户ID
         public string username { get; set; }   //真实姓名
         public string telephone { get; set; }   //办公室电话
@@ -938,7 +1054,7 @@ namespace JsonTestServer
     /// 所有属性继承用户登录类，JsonObjDeleteUserary>
     public class JsonObjUpdatePwd : JsonObjUserLogin
     {
-        public string oldpwd { get; set;}   //旧密码
+        public string oldpwd { get; set; }   //旧密码
     }
 
     /// <summary>
@@ -949,9 +1065,452 @@ namespace JsonTestServer
     {
         public List<arrayUser> array = new List<arrayUser>();    //角色列表
     }
+
+    /// <summary>
+    /// 添加权限
+    /// </summary>
+    public class JsonObjAddPrivilege : JsonRequest
+    {
+        public string privilegename { get; set; }   //权限名(唯一)
+
+        private List<arrayPrivilege> m_array = new List<arrayPrivilege>();
+
+        public List<arrayPrivilege> array
+        {
+            get { return m_array; }
+            set { m_array = value; }
+        }
+    }
+
+    /// <summary>
+    /// 修改权限
+    /// 指定privilegeid，继续添加权限类 JsonObjAddPrivilege
+    /// </summary>
+    public class JsonObjUpdatePrivilege : JsonObjAddPrivilege
+    {
+        public string privilegeid { get; set; } //权限ID
+    }
+
+    public class JsonObjDeletePrivilege : JsonRequest
+    {
+        public string privilegeid { get; set; } //权限ID
+        public string privilegename { get; set; }   //权限名(唯一)
+    }
+
+    public class JsonObjRolePrivilege : JsonRequest
+    {
+        public string roleid { get; set; }  //角色ID
+    }
+
+    public class JsonObjPrivilegeDevice : JsonRequest
+    {
+        public string privilegeid { get; set; } //权限ID
+    }
+
+    public class JsonObjGetPrivilege : JsonRequest
+    {
+        public string flag { get; set; }    //0-返回全部，1-winform客户端权限
+        public string privilege { get; set; }   //权限ID/权限名/设备名，等于空字符串时查询所有权限
+        public string isexact { get; set; } //1-精确查询，0-模糊查询
+    }
+
+    /// <summary>
+    /// 添加角色
+    /// </summary>
+    public class JsonObjAddRole : JsonRequest
+    {
+        public string rolename { get; set; }        //角色名
+
+        private List<arrayRole> m_array = new List<arrayRole>();    //添加角色时的权限集合
+
+        public List<arrayRole> array
+        {
+            get { return m_array; }
+            set { m_array = value; }
+        }
+    }
+
+    /// <summary>
+    /// 修改角色
+    /// 额外指定权限ID，继承添加角色类即可JsonObjAddRole
+    /// </summary>
+    public class JsonObjUpdateRole : JsonObjAddRole
+    {
+        public string roleid { get; set; }  //角色ID
+    }
+
+    /// <summary>
+    /// 删除角色
+    /// </summary>
+    public class JsonObjDeleteRole : JsonRequest
+    {
+        public string rolename { get; set; }        //角色名
+        public string roleid { get; set; }  //角色ID
+    }
+
+    /// <summary>
+    /// 获取指定用户的所有角色
+    /// </summary>
+    public class JsonObjUserRole : JsonRequest
+    {
+        public string userid { get; set; }  //用户登录ID
+    }
+
+    /// <summary>
+    /// 获取所有角色
+    /// </summary>
+    public class JsonObjGetRole : JsonRequest
+    {
+        public string role { get; set; }    //角色ID/角色名/权限名，等于空字符串时查询所有角色
+        public string isexact { get; set; }    //是否精确查询
+    }
+
+    public class JsonObjAddPlat : JsonRequest
+    {
+        public string remoteip { get; set; }    //下级平台添加
+        public string port { get; set; }    //远程平台端口
+    }
+
+    /// <summary>
+    /// 修改子平台
+    /// 修改指定IDr 子平台，需要修改IP和PORT。继承JsonObjDeletePlat
+    /// </summary>
+    public class JsonObjUpdatePlat : JsonObjDeletePlat
+    {
+        public string ip { get; set; }  //新IP地址
+        public string port { get; set; }    //新端口
+    }
+
+    /// <summary>
+    /// 删除平台
+    /// </summary>
+    public class JsonObjDeletePlat : JsonRequest
+    {
+        public string platid { get; set; }  //子平台ID
+    }
+
+    /// <summary>
+    /// 条件获取平台列表
+    /// </summary>
+    public class JsonObjPlatListExact : JsonRequest
+    {
+        public string plat { get; set; }  //名称或者ID
+        public string isexact { get; set; }  //是否精确查询
+    }
+
+    /// <summary>
+    /// 添加组
+    /// </summary>
+    public class JsonObjAddGroup : JsonRequest
+    {
+        public string groupname { get; set; }   //组名
+        public string parentgroupid { get; set; }   //上级组ID
+    }
+
+    /// <summary>
+    /// 修改组
+    /// 需要指定group id，继承JsonObjAddGroup
+    /// </summary>
+    public class JsonObjUpdateGroup : JsonObjAddGroup
+    {
+        public string groupid { get; set; }   //组ID
+    }
+
+    /// <summary>
+    /// 删除组
+    /// </summary>
+    public class JsonObjDeleteGroup : JsonRequest
+    {
+        public string groupid { get; set; }   //组ID
+    }
+
+    /// <summary>
+    /// 获取平台下所有组
+    /// </summary>
+    public class JsonObjPlatGroup : JsonRequest
+    {
+        public string platid { get; set; }   //平台ID
+    }
+
+    /// <summary>
+    /// 组查询
+    /// </summary>
+    public class JsonObjGroupSearch : JsonRequest
+    {
+        public string group { get; set; }   //组ID或组名
+        public string isexact { get; set; } //组ID或组名
+    }
+
+    /// <summary>
+    /// 云台 移动
+    /// deviceid属性继承 JsonObjGetPresets类
+    /// </summary>
+    public class JsonObjKeepMove : JsonObjGetPresets
+    {
+        public string x { get; set; }    //x轴移动速度
+        public string y { get; set; }    //y轴移动速度
+        public string z { get; set; }    //调整变焦
+    }
+
+    /// <summary>
+    /// 云台 停止移动
+    /// deviceid属性继承 JsonObjGetPresets类
+    /// </summary>
+    public class JsonObjStopMove : JsonObjGetPresets
+    {
+        public string xyz { get; set; }    //值是z时停止调焦，值是x,y时停止移动
+    }
+
+    /// <summary>
+    /// 云台 相对移动
+    /// 所有属性继承 云台移动类JsonObjKeepMove
+    /// </summary>
+    public class JsonObjRltMove : JsonObjKeepMove
+    { }
+
+    /// <summary>
+    /// 获取预置点
+    /// </summary>
+    public class JsonObjGetPresets : JsonRequest
+    {
+        public string deviceid { get; set; }    //设备ID
+    }
+
+    /// <summary>
+    /// 设置预置点，删除和移动
+    /// </summary>
+    public class JsonObjSetPresets : JsonObjGetPresets
+    {
+        public string name { get; set; }    //预置点名
+        public string Token { get; set; }    //预置点token，如果是新增预置点，此处设置””或”-1”
+    }
+
+    /// <summary>
+    /// RTSP转发和批量转发
+    /// </summary>
+    public class JsonObjRtspRelay : JsonRequest
+    {
+        public string deviceid { get; set; }    //(下级平台+)设备ID,多个设备ID以|分割,不支持下级平台设备的批量转发请求
+        public string flag { get; set; }    //主辅流标记
+    }
+
+    /// <summary>
+    /// 录像文件回放
+    /// </summary>
+    public class JsonObjTSFileRelay : JsonRequest
+    {
+        public string deviceid { get; set; }    //(下级平台+)设备ID
+        public string begtime { get; set; }    //开始时间
+        public string endtime { get; set; }    //结束时间
+    }
+
+    /// <summary>
+    /// 回放进度调整
+    /// </summary>
+    public class JsonObjTSFileSeekPlay : JsonRequest
+    {
+        public string deviceid { get; set; }    //设备ID
+        public string videoname { get; set; }    //视频名
+        public string videopos { get; set; }    //播放时间点
+    }
+
+    /// <summary>
+    /// 获取视频文件下载列表
+    /// 属性与录像文件回放相同，继承JsonObjTSFileRelay
+    /// </summary>
+    public class JsonObjDownloadFileList : JsonObjTSFileRelay
+    { }
+
+    /// <summary>
+    /// 获取设备转发地址(内部使用)
+    /// 指定是否要音频，继承RTSP转发类JsonObjRtspRelay
+    /// </summary>
+    public class JsonObjGetRelayRtsp : JsonObjRtspRelay
+    {
+        public string audio { get; set; }   //是否带有音频
+    }
+
+    /// <summary>
+    /// 添加、修改和批量添加计划三个子类的父类
+    /// </summary>
+    public class JsonObjPlan : JsonRequest
+    {
+        public string deviceid { get; set; }   //设备ID
+        public string begdate { get; set; }   //开始日期
+        public string enddate { get; set; }   //结束日期
+        public string begloop { get; set; }   //开始循环标记
+        public string endloop { get; set; }   //结束循环标记
+        public string begtime { get; set; }   //开始时间
+        public string endtime { get; set; }   //结束时间
+        public string loopflag { get; set; }   //循环标志
+        public string tasktype { get; set; }   //任务类型
+        public string userid { get; set; }   //创建者ID
+    }
+
+    /// <summary>
+    /// 添加和修改计划
+    /// 指定单个PlanName，其它所有属性继承JsonObjPlan
+    /// </summary>
+    public class JsonObjAddPlan : JsonObjPlan
+    {
+        public string planname { get; set; }   //计划名
+    }
+
+    /// <summary>
+    /// 查询计划
+    /// </summary>
+    public class JsonObjPlanSearch : JsonRequest
+    {
+        public string plan { get; set; }    //查询条件，可以是计划名、设备名、设备ID
+    }
+
+    /// <summary>
+    /// 精确查询计划
+    /// 与删除计划相同属性，继承JsonObjDeletePlan
+    /// </summary>
+    public class JsonObjExactPlanSearch : JsonObjDeletePlan
+    {
+    }
+
+    /// <summary>
+    /// 删除计划
+    /// </summary>
+    public class JsonObjDeletePlan : JsonRequest
+    {
+        public string deviceid { get; set; }   //设备ID        
+        public string planname { get; set; }   //计划名
+    }
+
+    /// <summary>
+    /// 启动、关闭计划
+    /// 指定Status，DeviceID和PlanName继承 删除计划类JsonObjDeletePlan
+    /// </summary>
+    public class JsonObjClosePlan : JsonObjDeletePlan
+    {
+        public string state { get; set; }   //状态 
+    }
+
+    /// <summary>
+    /// 批量添加计划任务
+    /// </summary>
+    public class JsonObjBatAddPlan : JsonObjPlan
+    {
+        private List<arrayPlan> m_array = new List<arrayPlan>();
+        public List<arrayPlan> array
+        {
+            get { return m_array; }
+            set { m_array = value; }
+        }
+    }
+
+    /// <summary>
+    /// 视频预览
+    /// </summary>
+    public class JsonObjMP4Preview : JsonRequest
+    {
+        public string url { get; set; } //rtsp地址
+        public string loginid { get; set; } //设备登录ID
+        public string loginpwd { get; set; } //设备登录密码
+    }
+
+    /// <summary>
+    /// 视频预览(下级平台设备)
+    /// </summary>
+    public class JsonObjDevicePreview : JsonRequest
+    {
+        public string deviceid { get; set; } //设备ID
+        public string flag { get; set; } //主辅流标记
+    }
+
+    /// <summary>
+    /// 录像服务器(RMS)配置
+    /// </summary>
+    public class JsonObjRMSConf : JsonRequest
+    {
+        public string ip { get; set; } //服务器IP
+        public string port { get; set; } //端口
+        public string retain_time { get; set; } //循环删除录像时间
+        public string src_num { get; set; } //最大接入设备数量
+        public string reconn_time { get; set; } //资源断线重连时间
+        public string save_type { get; set; } //保存类型
+        public string length { get; set; } //单媒体文件长度
+        public string section { get; set; } //切片数量
+        public string save_pos { get; set; } //保持位置
+        public string local_path { get; set; } //本地路径
+        public string leave_space { get; set; } //最大使用空间
+        public string over_opt { get; set; } //采取的操作
+    }
+
+    /// <summary>
+    /// 数据库配置,
+    /// </summary>
+    public class JsonObjDBConf : JsonRequest
+    {
+        public string dbname { get; set; } //数据库名
+        public string ip { get; set; } //服务器IP
+        public string port { get; set; } //端口
+        public string dbuser { get; set; } //用户名
+        public string dbpwd { get; set; } //密码
+    }
+
+    /// <summary>
+    /// 测试数据库连接，所有属性继承JsonObjDBConf
+    /// </summary>
+    public class JsonObjCheckDB : JsonObjDBConf
+    { }
+
+    /// <summary>
+    /// 重启服务
+    /// </summary>
+    public class JsonObjReStart : JsonRequest
+    {
+        //重启的服务器，ALL/CMS/HDR/RMS, ALL-重启所有服务、CMS-CMS服务器、HDR-转发服务器、RMS-录像服务器
+        public string server { get; set; }
+    }
+
+    /// <summary>
+    /// 同步所有数据(内部使用)
+    /// </summary>
+    public class JsonObjAllDataSync : JsonRequest
+    {
+        public string count { get; set; }  //同步表数量、现最大是3，分别是平台、组、设备表
+        public string table_1 { get; set; }  //表1表名
+        public string table_2 { get; set; }  //表1表名
+        public string table_3 { get; set; }  //表1表名
+        private List<arrayDataSync1> m_array_1 = new List<arrayDataSync1>();
+        private List<arrayDataSync2> m_array_2 = new List<arrayDataSync2>();
+        private List<arrayDataSync3> m_array_3 = new List<arrayDataSync3>();
+        public List<arrayDataSync1> array_1
+        {
+            get { return m_array_1; }
+            set { m_array_1 = value; }
+        }
+        public List<arrayDataSync2> array_2
+        {
+            get { return m_array_2; }
+            set { m_array_2 = value; }
+        }
+
+        public List<arrayDataSync3> array_3
+        {
+            get { return m_array_3; }
+            set { m_array_3 = value; }
+        }
+    }
+
+    /// <summary>
+    /// 同步部分数据(内部使用)
+    /// </summary>
+    public class JsonObjDataSync : JsonRequest
+    {
+        public string count { get; set; }  //同步表数量、现最大是3，分别是平台、组、设备表
+        public string opt { get; set; } //数据操作类型
+        public string table_1 { get; set; }  //表1表名
+        public List<string> array_1 { get; set; }  //
+    }
     #endregion
 
-    #region Json ACK
+    #region Json ACK 待定，尚未使用
     public class Body
     {
         /// <summary>

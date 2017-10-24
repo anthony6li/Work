@@ -165,10 +165,21 @@ namespace Util
                 {
                     case JsonMethodType.Version:
                     case JsonMethodType.RunStatus:
+                    case JsonMethodType.PlatList:
+                    case JsonMethodType.PlatInfo:
+                    case JsonMethodType.RmsFtpInfo:
+                    case JsonMethodType.AllPlanSearch:
+                    case JsonMethodType.StopPreview:
+                    case JsonMethodType.GetRMSConf:
+                    case JsonMethodType.GetDBConf:
+                    case JsonMethodType.ReqDataSync:
                     case JsonMethodType.SaveDevFile:
                         JsonObjVersion joRS = new JsonObjVersion();
                         joRS.method = type;
                         tempJsonStr = JsonConvert.SerializeObject(joRS, jsonSetting);
+                        break;
+                    case JsonMethodType.SysInfo:
+                        //http请求路径：http://[ip]:[port]/api/sysinfo
                         break;
                     case JsonMethodType.UserLogSearch:
                         JsonObjUserLogSearch jrULS = new JsonObjUserLogSearch();
@@ -685,6 +696,351 @@ namespace Util
                         joBUR.array.Add(userBUR);
                         tempJsonStr = JsonConvert.SerializeObject(joBUR, jsonSetting);
                         break;
+
+                    case JsonMethodType.AddPrivilege:
+                        JsonObjAddPrivilege joAP = new JsonObjAddPrivilege();
+                        joAP.method = type;
+                        joAP.privilegename = "权限名(唯一)";
+                        arrayPrivilege arrAddPrivi = new arrayPrivilege();
+                        arrAddPrivi.deviceid = "设备ID";
+                        arrAddPrivi.devicename = "设备名";
+                        joAP.array.Add(arrAddPrivi);
+                        tempJsonStr = JsonConvert.SerializeObject(joAP, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdatePrivilege:
+                        JsonObjUpdatePrivilege joUpP = new JsonObjUpdatePrivilege();
+                        joUpP.method = type;
+                        joUpP.privilegeid = "权限ID";
+                        joUpP.privilegename = "权限名，权限名可以是现有权限，也可以是当前系统没有的权限，没有时默认按照新加权限处理";
+                        arrayPrivilege arrUpdatePrivi = new arrayPrivilege();
+                        arrUpdatePrivi.deviceid = "设备ID";
+                        arrUpdatePrivi.devicename = "设备名";
+                        joUpP.array.Add(arrUpdatePrivi);
+                        tempJsonStr = JsonConvert.SerializeObject(joUpP, jsonSetting);
+                        break;
+                    case JsonMethodType.DeletePrivilege:
+                        JsonObjDeletePrivilege joDelP = new JsonObjDeletePrivilege();
+                        joDelP.method = type;
+                        joDelP.privilegeid = "权限ID";
+                        joDelP.privilegename = "权限名";
+                        tempJsonStr = JsonConvert.SerializeObject(joDelP, jsonSetting);
+                        break;
+                    case JsonMethodType.RolePrivilege:
+                        JsonObjRolePrivilege joRP = new JsonObjRolePrivilege();
+                        joRP.method = type;
+                        joRP.roleid = "角色ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joRP, jsonSetting);
+                        break;
+                    case JsonMethodType.PrivilegeDevice:
+                        JsonObjPrivilegeDevice joPD = new JsonObjPrivilegeDevice();
+                        joPD.method = type;
+                        joPD.privilegeid = "权限ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joPD, jsonSetting);
+                        break;
+                    case JsonMethodType.GetPrivilege:
+                        JsonObjGetPrivilege joGP = new JsonObjGetPrivilege();
+                        joGP.method = type;
+                        joGP.flag = "0-返回全部，1-winform客户端权限";
+                        joGP.privilege = "权限ID/权限名/设备名";
+                        joGP.isexact = "是否精确查询";
+                        tempJsonStr = JsonConvert.SerializeObject(joGP, jsonSetting);
+                        break;
+                    case JsonMethodType.AddRole:
+                        JsonObjAddRole joAR = new JsonObjAddRole();
+                        joAR.method = type;
+                        joAR.rolename = "角色名";
+                        arrayRole arrAddRole = new arrayRole();
+                        arrAddRole.privilegeid = "权限ID";
+                        arrAddRole.privilegename = "权限名";
+                        joAR.array.Add(arrAddRole);
+                        tempJsonStr = JsonConvert.SerializeObject(joAR, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdateRole:
+                        JsonObjUpdateRole joUR = new JsonObjUpdateRole();
+                        joUR.method = type;
+                        joUR.rolename = "角色名，角色可以是现有角色，也可以是当前系统没有的角色，没有时默认按照新加角色处理";
+                        joUR.roleid = "角色ID";
+                        arrayRole arrRole = new arrayRole();
+                        arrRole.privilegeid = "权限ID";
+                        arrRole.privilegename = "权限名";
+                        joUR.array.Add(arrRole);
+                        tempJsonStr = JsonConvert.SerializeObject(joUR, jsonSetting);
+                        break;
+                    case JsonMethodType.DeleteRole:
+                        JsonObjDeleteRole joDR = new JsonObjDeleteRole();
+                        joDR.method = type;
+                        joDR.rolename = "角色名";
+                        joDR.roleid = "角色ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joDR, jsonSetting);
+                        break;
+                    case JsonMethodType.UserRole:
+                        JsonObjUserRole joUserR = new JsonObjUserRole();
+                        joUserR.method = type;
+                        joUserR.userid = "用户登录ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joUserR, jsonSetting);
+                        break;
+                    case JsonMethodType.GetRole:
+                        JsonObjGetRole joGetR = new JsonObjGetRole();
+                        joGetR.method = type;
+                        joGetR.role = "角色ID/角色名/权限名，等于空字符串时查询所有角色";
+                        joGetR.isexact = "1-精确查询，0-模糊查询";
+                        tempJsonStr = JsonConvert.SerializeObject(joGetR, jsonSetting);
+                        break;
+                    case JsonMethodType.AddPlat:
+                        JsonObjAddPlat joAddP = new JsonObjAddPlat();
+                        joAddP.method = type;
+                        joAddP.port = "远程平台端口";
+                        joAddP.remoteip = "远程子平台IP";
+                        tempJsonStr = JsonConvert.SerializeObject(joAddP, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdatePlat:
+                        JsonObjUpdatePlat joUPlat = new JsonObjUpdatePlat();
+                        joUPlat.method = type;
+                        joUPlat.ip = "新IP地址";
+                        joUPlat.port = "新端口";
+                        joUPlat.platid = "子平台ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joUPlat, jsonSetting);
+                        break;
+                    case JsonMethodType.DeletePlat:
+                        JsonObjDeletePlat joDPlat = new JsonObjDeletePlat();
+                        joDPlat.method = type;
+                        joDPlat.platid = "子平台ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joDPlat, jsonSetting);
+                        break;
+                    case JsonMethodType.PlatListExact:
+                        JsonObjPlatListExact joPL = new JsonObjPlatListExact();
+                        joPL.method = type;
+                        joPL.plat = "";
+                        joPL.isexact = "";
+                        tempJsonStr = JsonConvert.SerializeObject(joPL, jsonSetting);
+                        break;
+                    case JsonMethodType.AddGroup:
+                        JsonObjAddGroup joAG = new JsonObjAddGroup();
+                        joAG.method = type;
+                        joAG.groupname = "组名当前系统唯一";
+                        joAG.parentgroupid = "上级组ID，没有上级组此属性为空或不填写此属性";
+                        tempJsonStr = JsonConvert.SerializeObject(joAG, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdateGroup:
+                        JsonObjUpdateGroup joUG = new JsonObjUpdateGroup();
+                        joUG.method = type;
+                        joUG.groupname = "组名当前系统唯一";
+                        joUG.parentgroupid = "上级组ID，没有上级组此属性为空或不填写此属性";
+                        joUG.groupid = "组ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joUG, jsonSetting);
+                        break;
+                    case JsonMethodType.DeleteGroup:
+                        JsonObjDeleteGroup joDG = new JsonObjDeleteGroup();
+                        joDG.method = type;
+                        joDG.groupid = "组ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joDG, jsonSetting);
+                        break;
+                    case JsonMethodType.PlatGroup:
+                        JsonObjPlatGroup joPG = new JsonObjPlatGroup();
+                        joPG.method = type;
+                        joPG.platid = "平台ID，如果是当前平台不需要此属性";
+                        tempJsonStr = JsonConvert.SerializeObject(joPG, jsonSetting);
+                        break;
+                    case JsonMethodType.GroupSearch:
+                        JsonObjGroupSearch joGS = new JsonObjGroupSearch();
+                        joGS.method = type;
+                        joGS.group = "组ID或组名";
+                        joGS.isexact = "1-精确查询，0-模糊查询";
+                        tempJsonStr = JsonConvert.SerializeObject(joGS, jsonSetting);
+                        break;
+                    case JsonMethodType.KeepMove:
+                        JsonObjKeepMove joKM = new JsonObjKeepMove();
+                        joKM.method = type;
+                        joKM.deviceid = "设备ID";
+                        joKM.x = "x轴移动速度";
+                        joKM.y = "y轴移动速度";
+                        joKM.z = "调整变焦，z有值时，x,y值默认无效，操作默认为调焦.";
+                        tempJsonStr = JsonConvert.SerializeObject(joKM, jsonSetting);
+                        break;
+                    case JsonMethodType.StopMove:
+                        JsonObjStopMove joSM = new JsonObjStopMove();
+                        joSM.method = type;
+                        joSM.deviceid = "设备ID";
+                        joSM.xyz = "值是z时停止调焦，值是x,y时停止移动。";
+                        tempJsonStr = JsonConvert.SerializeObject(joSM, jsonSetting);
+                        break;
+                    case JsonMethodType.RltMove:
+                        JsonObjRltMove joRltM = new JsonObjRltMove();
+                        joRltM.method = type;
+                        joRltM.deviceid = "设备ID";
+                        joRltM.x = "x轴移动速度";
+                        joRltM.y = "y轴移动速度";
+                        joRltM.z = "调整变焦，z有值时，x,y值默认无效，操作默认为调焦.";
+                        tempJsonStr = JsonConvert.SerializeObject(joRltM, jsonSetting);
+                        break;
+                    case JsonMethodType.GetPresets:
+                        JsonObjGetPresets joGetP = new JsonObjGetPresets();
+                        joGetP.method = type;
+                        joGetP.deviceid = "设备ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joGetP, jsonSetting);
+                        break;
+                    case JsonMethodType.SetPresets:
+                    case JsonMethodType.RemovePresets:
+                    case JsonMethodType.GotoPresets:
+                        JsonObjSetPresets joSP = new JsonObjSetPresets();
+                        joSP.method = type;
+                        joSP.deviceid = "设备ID";
+                        joSP.name = "预置点名";
+                        joSP.Token = "预置点token，如果是新增预置点，此处设置””或”-1”";
+                        tempJsonStr = JsonConvert.SerializeObject(joSP, jsonSetting);
+                        break;
+                    case JsonMethodType.RtspRelay:
+                        JsonObjRtspRelay joRtspR = new JsonObjRtspRelay();
+                        joRtspR.method = type;
+                        joRtspR.deviceid = "(下级平台+)设备ID,多个设备ID以|分割，此处不支持下级平台设备的批量转发请求";
+                        joRtspR.flag = "主辅流标记0-主流，1-辅流";
+                        tempJsonStr = JsonConvert.SerializeObject(joRtspR, jsonSetting);
+                        break;
+                    case JsonMethodType.TSFileRelay:
+                        JsonObjTSFileRelay joTSFR = new JsonObjTSFileRelay();
+                        joTSFR.method = type;
+                        joTSFR.deviceid = "(下级平台+)设备ID，如果是本级平台设备，此处是设备ID，如果是下级(可能多级)，规则是：子平台ID/././设备ID";
+                        joTSFR.begtime = "开始时间";
+                        joTSFR.endtime = "结束时间";
+                        tempJsonStr = JsonConvert.SerializeObject(joTSFR, jsonSetting);
+                        break;
+                    case JsonMethodType.TSFileSeekPlay:
+                        JsonObjTSFileSeekPlay joTSFSP = new JsonObjTSFileSeekPlay();
+                        joTSFSP.method = type;
+                        joTSFSP.deviceid = "(下级平台+)设备ID，如果是本级平台设备，此处是设备ID，如果是下级(可能多级)，规则是：子平台ID/././设备ID";
+                        joTSFSP.videoname = "视频名，TSFileRelay请求返回";
+                        joTSFSP.videopos = "播放时间点（进度）";
+                        tempJsonStr = JsonConvert.SerializeObject(joTSFSP, jsonSetting);
+                        break;
+                    case JsonMethodType.DownloadFileList:
+                        JsonObjDownloadFileList joDFL = new JsonObjDownloadFileList();
+                        joDFL.method = type;
+                        joDFL.deviceid = "设备ID";
+                        joDFL.begtime = "开始时间";
+                        joDFL.endtime = "结束时间";
+                        tempJsonStr = JsonConvert.SerializeObject(joDFL, jsonSetting);
+                        break;
+                    case JsonMethodType.GetRelayRtsp:
+                        JsonObjGetRelayRtsp joGRR = new JsonObjGetRelayRtsp();
+                        joGRR.method = type;
+                        joGRR.deviceid = "设备ID";
+                        joGRR.audio = "是否带有音频，0-查询没有音频的视频流、1-查询有音频的视频流，此属性为1时检查有音频和无音频两种视频流，查到有音频的流直接返回，如果没有带有音频的流而有无音频视频流返回无音频视频流地址";
+                        joGRR.flag = "主辅流标记0-主流、1-辅流";
+                        tempJsonStr = JsonConvert.SerializeObject(joGRR, jsonSetting);
+                        break;
+                    case JsonMethodType.AddPlan:
+                    case JsonMethodType.UpdatePlan:
+                        JsonObjAddPlan joAPlan = new JsonObjAddPlan();
+                        joAPlan.method = type;
+                        joAPlan.deviceid = "设备ID";
+                        joAPlan.begdate = "开始日期，格式：YYYY-MM-DD";
+                        joAPlan.enddate = "结束日期，格式：YYYY-MM-DD";
+                        joAPlan.begloop = "开始循环标记";
+                        joAPlan.endloop = "结束循环标记";
+                        joAPlan.begtime = "开始时间，格式：hh:mm:ss";
+                        joAPlan.endtime = "结束时间，格式：hh:mm:ss";
+                        joAPlan.loopflag = "循环标志 0-按天、1-按周、2-按月";
+                        joAPlan.tasktype = "任务类型，0-录像，现在有录像";
+                        joAPlan.userid = "创建者ID";
+                        joAPlan.planname = "计划名";
+                        tempJsonStr = JsonConvert.SerializeObject(joAPlan, jsonSetting);
+                        break;
+                    case JsonMethodType.PlanSearch:
+                        JsonObjPlanSearch joPlanS = new JsonObjPlanSearch();
+                        joPlanS.method = type;
+                        joPlanS.plan = "查询条件，可以是计划名、设备名、设备ID";
+                        tempJsonStr = JsonConvert.SerializeObject(joPlanS, jsonSetting);
+                        break;
+                    case JsonMethodType.ExactPlanSearch:
+                    case JsonMethodType.DeletePlan:
+                        JsonObjExactPlanSearch joEPS = new JsonObjExactPlanSearch();
+                        joEPS.method = type;
+                        joEPS.deviceid = "设备ID";
+                        joEPS.planname = "计划名";
+                        tempJsonStr = JsonConvert.SerializeObject(joEPS, jsonSetting);
+                        break;
+                    case JsonMethodType.ClosePlan:
+                        JsonObjClosePlan joCP = new JsonObjClosePlan();
+                        joCP.method = type;
+                        joCP.deviceid = "设备ID";
+                        joCP.planname = "计划名";
+                        joCP.state = "状态，0-停用、1-启用";
+                        tempJsonStr = JsonConvert.SerializeObject(joCP, jsonSetting);
+                        break;
+                    case JsonMethodType.BatAddPlan:
+                        JsonObjBatAddPlan joBAP = new JsonObjBatAddPlan();
+                        joBAP.method = type;
+                        joBAP.method = type;
+                        joBAP.deviceid = "设备ID";
+                        joBAP.begdate = "开始日期，格式：YYYY-MM-DD";
+                        joBAP.enddate = "结束日期，格式：YYYY-MM-DD";
+                        joBAP.begloop = "开始循环标记，如果按天循环可以不填、按周循环是为0-6，星期日为0，星期六为6、按月循环时，具体日期12号即为12";
+                        joBAP.endloop = "结束循环标记";
+                        joBAP.begtime = "开始时间，格式：hh:mm:ss";
+                        joBAP.endtime = "结束时间，格式：hh:mm:ss";
+                        joBAP.loopflag = "循环标志 0-按天、1-按周、2-按月";
+                        joBAP.tasktype = "任务类型，0-录像，现在有录像";
+                        joBAP.userid = "创建者ID";
+                        arrayPlan arrPlan = new arrayPlan();
+                        arrPlan.planname = "计划名（与deviceid构成唯一约束）";
+                        arrPlan.deviceid = "设备ID（与planname构成唯一约束）";
+                        tempJsonStr = JsonConvert.SerializeObject(joBAP, jsonSetting);
+                        break;
+                    case JsonMethodType.MP4Preview:
+                        JsonObjMP4Preview joMP4P = new JsonObjMP4Preview();
+                        joMP4P.method = type;
+                        joMP4P.loginid = "设备登录ID，可以为空，onvif扫描出的地址预览时不能为空";
+                        joMP4P.loginpwd = "设备登录密码，可以为空，onvif扫描出的地址预览时不能为空";
+                        joMP4P.url = "预览视频流的rtsp地址";
+                        tempJsonStr = JsonConvert.SerializeObject(joMP4P, jsonSetting);
+                        break;
+                    case JsonMethodType.DevicePreview:
+                        JsonObjDevicePreview joDPre = new JsonObjDevicePreview();
+                        joDPre.method = type;
+                        joDPre.deviceid = "设备ID";
+                        joDPre.flag = "主辅流标记0-主流，1-辅流。";
+                        tempJsonStr = JsonConvert.SerializeObject(joDPre, jsonSetting);
+                        break;
+                    case JsonMethodType.RMSConf:
+                        JsonObjRMSConf joRMSC = new JsonObjRMSConf();
+                        joRMSC.method = type;
+                        joRMSC.ip = "测试数据库服务器IP";
+                        joRMSC.port = "端口";
+                        joRMSC.retain_time = "循环删除录像时间小时为单位，超过此时间的视频文件删除";
+                        joRMSC.src_num = "最大接入设备数量，现在不限制，填写固定值9999";
+                        joRMSC.reconn_time = "资源断线重连时间秒为单位";
+                        joRMSC.save_type = "保存类型0-TS、1-MP4，现在只录制一种TS，填写固定值0";
+                        joRMSC.length = "单媒体文件长度秒为单位";
+                        joRMSC.section = "切片数量，一个m3u8文件对应多少ts文件";
+                        joRMSC.save_pos = "保持位置，0-本地、1-云存储，现在只保存本地，填写固定值0";
+                        joRMSC.local_path = "本地路径";
+                        joRMSC.leave_space = "最大使用空间，当磁盘空间使用达到上限时执行over_opt的操作";
+                        joRMSC.over_opt = "当磁盘空间使用达到上限时采取的操作";
+                        tempJsonStr = JsonConvert.SerializeObject(joRMSC, jsonSetting);
+                        break;
+                    case JsonMethodType.DBConf:
+                    case JsonMethodType.CheckDB:
+                        JsonObjDBConf joDBConf = new JsonObjDBConf();
+                        joDBConf.method = type;
+                        joDBConf.ip = "测试数据库服务器IP";
+                        joDBConf.port = "端口";
+                        joDBConf.dbname = "测试数据库名";
+                        joDBConf.dbuser = "用户名";
+                        joDBConf.dbpwd = "密码";
+                        tempJsonStr = JsonConvert.SerializeObject(joDBConf, jsonSetting);
+                        break;
+                    case JsonMethodType.ReStart:
+                        JsonObjReStart joReStart = new JsonObjReStart();
+                        joReStart.method = type;
+                        joReStart.server = "重启的服务器，ALL/CMS/HDR/RMS, ALL-重启所有服务、CMS-CMS服务器、HDR-转发服务器、RMS-录像服务器";
+                        tempJsonStr = JsonConvert.SerializeObject(joReStart, jsonSetting);
+                        break;
+                    case JsonMethodType.AllDataSync:
+                        tempJsonStr = CreateJsonObjAllDataSync(type, jsonSetting);
+                        break;
+                    case JsonMethodType.DataSync:
+                        tempJsonStr = CreateJsonObjDataSync(type, jsonSetting);
+                        break;
                     default:
                         break;
                 }
@@ -724,6 +1080,15 @@ namespace Util
                 {
                     case JsonMethodType.Version:
                     case JsonMethodType.RunStatus:
+                    case JsonMethodType.SysInfo:
+                    case JsonMethodType.PlatList:
+                    case JsonMethodType.PlatInfo:
+                    case JsonMethodType.RmsFtpInfo:
+                    case JsonMethodType.AllPlanSearch:
+                    case JsonMethodType.StopPreview:
+                    case JsonMethodType.GetRMSConf:
+                    case JsonMethodType.GetDBConf:
+                    case JsonMethodType.ReqDataSync:
                     case JsonMethodType.SaveDevFile:
                         JsonObjVersion joRS = new JsonObjVersion();
                         joRS.method = type;
@@ -1248,6 +1613,360 @@ namespace Util
                         joBUR.array.Add(userBUR2);
                         tempJsonStr = JsonConvert.SerializeObject(joBUR, jsonSetting);
                         break;
+
+
+                    case JsonMethodType.AddPrivilege:
+                        JsonObjAddPrivilege joAP = new JsonObjAddPrivilege();
+                        joAP.method = type;
+                        joAP.privilegename = "办公室";
+                        arrayPrivilege arrAddPrivi1 = new arrayPrivilege();
+                        arrAddPrivi1.deviceid = "CMS0001-D2000001";
+                        arrAddPrivi1.devicename = "办公室1";
+                        arrayPrivilege arrAddPrivi2 = new arrayPrivilege();
+                        arrAddPrivi2.deviceid = "CMS0001-D2000002";
+                        arrAddPrivi2.devicename = "办公室2";
+                        joAP.array.Add(arrAddPrivi1);
+                        joAP.array.Add(arrAddPrivi2);
+                        tempJsonStr = JsonConvert.SerializeObject(joAP, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdatePrivilege:
+                        JsonObjUpdatePrivilege joUpP = new JsonObjUpdatePrivilege();
+                        joUpP.method = type;
+                        joUpP.privilegeid = "GM100001";
+                        joUpP.privilegename = "办公室";
+                        arrayPrivilege arrUpdatePrivi1 = new arrayPrivilege();
+                        arrUpdatePrivi1.deviceid = "CMS0001-D2000001";
+                        arrUpdatePrivi1.devicename = "办公室3";
+                        arrayPrivilege arrUpdatePrivi2 = new arrayPrivilege();
+                        arrUpdatePrivi2.deviceid = "CMS0001-D2000002";
+                        arrUpdatePrivi2.devicename = "办公室4";
+                        joUpP.array.Add(arrUpdatePrivi1);
+                        joUpP.array.Add(arrUpdatePrivi2);
+                        tempJsonStr = JsonConvert.SerializeObject(joUpP, jsonSetting);
+                        break;
+                    case JsonMethodType.DeletePrivilege:
+                        JsonObjDeletePrivilege joDelP = new JsonObjDeletePrivilege();
+                        joDelP.method = type;
+                        joDelP.privilegeid = "GM100001";
+                        joDelP.privilegename = "办公室";
+                        tempJsonStr = JsonConvert.SerializeObject(joDelP, jsonSetting);
+                        break;
+                    case JsonMethodType.RolePrivilege:
+                        JsonObjRolePrivilege joRP = new JsonObjRolePrivilege();
+                        joRP.method = type;
+                        joRP.roleid = "RM000002";
+                        tempJsonStr = JsonConvert.SerializeObject(joRP, jsonSetting);
+                        break;
+                    case JsonMethodType.PrivilegeDevice:
+                        JsonObjPrivilegeDevice joPD = new JsonObjPrivilegeDevice();
+                        joPD.method = type;
+                        joPD.privilegeid = "GM100001";
+                        tempJsonStr = JsonConvert.SerializeObject(joPD, jsonSetting);
+                        break;
+                    case JsonMethodType.GetPrivilege:
+                        JsonObjGetPrivilege joGP = new JsonObjGetPrivilege();
+                        joGP.method = type;
+                        joGP.flag = "0";
+                        joGP.privilege = "办公室";
+                        joGP.isexact = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joGP, jsonSetting);
+                        break;
+                    case JsonMethodType.AddRole:
+                        JsonObjAddRole joAR = new JsonObjAddRole();
+                        joAR.method = type;
+                        joAR.rolename = "办公室管理";
+                        arrayRole arrAddRole = new arrayRole();
+                        arrAddRole.privilegeid = "GM100001";
+                        arrAddRole.privilegename = "办公室";
+                        joAR.array.Add(arrAddRole);
+                        tempJsonStr = JsonConvert.SerializeObject(joAR, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdateRole:
+                        JsonObjUpdateRole joUR = new JsonObjUpdateRole();
+                        joUR.method = type;
+                        joUR.rolename = "办公室管理2";
+                        joUR.roleid = "RM100001";
+                        arrayRole arrRole = new arrayRole();
+                        arrRole.privilegeid = "GM100001";
+                        arrRole.privilegename = "办公室";
+                        joUR.array.Add(arrRole);
+                        tempJsonStr = JsonConvert.SerializeObject(joUR, jsonSetting);
+                        break;
+                    case JsonMethodType.DeleteRole:
+                        JsonObjDeleteRole joDR = new JsonObjDeleteRole();
+                        joDR.method = type;
+                        joDR.rolename = "办公室管理";
+                        joDR.roleid = "RM100001";
+                        tempJsonStr = JsonConvert.SerializeObject(joDR, jsonSetting);
+                        break;
+                    case JsonMethodType.UserRole:
+                        JsonObjUserRole joUserR = new JsonObjUserRole();
+                        joUserR.method = type;
+                        joUserR.userid = "user_1024";
+                        tempJsonStr = JsonConvert.SerializeObject(joUserR, jsonSetting);
+                        break;
+                    case JsonMethodType.GetRole:
+                        JsonObjGetRole joGetR = new JsonObjGetRole();
+                        joGetR.method = type;
+                        joGetR.role = "";
+                        joGetR.isexact = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joGetR, jsonSetting);
+                        break;
+                    case JsonMethodType.AddPlat:
+                        JsonObjAddPlat joAddP = new JsonObjAddPlat();
+                        joAddP.method = type;
+                        joAddP.port = "555";
+                        joAddP.remoteip = "10.10.1.207";
+                        tempJsonStr = JsonConvert.SerializeObject(joAddP, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdatePlat:
+                        JsonObjUpdatePlat joUPlat = new JsonObjUpdatePlat();
+                        joUPlat.method = type;
+                        joUPlat.ip = "10.10.1.207";
+                        joUPlat.port = "556";
+                        joUPlat.platid = "CMS0002";
+                        tempJsonStr = JsonConvert.SerializeObject(joUPlat, jsonSetting);
+                        break;
+                    case JsonMethodType.DeletePlat:
+                        JsonObjDeletePlat joDPlat = new JsonObjDeletePlat();
+                        joDPlat.method = type;
+                        joDPlat.platid = "CMS0002";
+                        tempJsonStr = JsonConvert.SerializeObject(joDPlat, jsonSetting);
+                        break;
+                    case JsonMethodType.PlatListExact:
+                        JsonObjPlatListExact joPL = new JsonObjPlatListExact();
+                        joPL.method = type;
+                        joPL.plat = "CMS0002";
+                        joPL.isexact = "1";
+                        tempJsonStr = JsonConvert.SerializeObject(joPL, jsonSetting);
+                        break;
+                    case JsonMethodType.AddGroup:
+                        JsonObjAddGroup joAG = new JsonObjAddGroup();
+                        joAG.method = type;
+                        joAG.groupname = "办公室";
+                        joAG.parentgroupid = "";
+                        tempJsonStr = JsonConvert.SerializeObject(joAG, jsonSetting);
+                        break;
+                    case JsonMethodType.UpdateGroup:
+                        JsonObjUpdateGroup joUG = new JsonObjUpdateGroup();
+                        joUG.method = type;
+                        joUG.groupname = "办公室";
+                        joUG.parentgroupid = "GP000001";
+                        joUG.groupid = "GP000003";
+                        tempJsonStr = JsonConvert.SerializeObject(joUG, jsonSetting);
+                        break;
+                    case JsonMethodType.DeleteGroup:
+                        JsonObjDeleteGroup joDG = new JsonObjDeleteGroup();
+                        joDG.method = type;
+                        joDG.groupid = "GP000003";
+                        tempJsonStr = JsonConvert.SerializeObject(joDG, jsonSetting);
+                        break;
+                    case JsonMethodType.PlatGroup:
+                        JsonObjPlatGroup joPG = new JsonObjPlatGroup();
+                        joPG.method = type;
+                        joPG.platid = "CMS0001";
+                        tempJsonStr = JsonConvert.SerializeObject(joPG, jsonSetting);
+                        break;
+                    case JsonMethodType.GroupSearch:
+                        JsonObjGroupSearch joGS = new JsonObjGroupSearch();
+                        joGS.method = type;
+                        joGS.group = "CMS0002-GP000003";
+                        joGS.isexact = "1";
+                        tempJsonStr = JsonConvert.SerializeObject(joGS, jsonSetting);
+                        break;
+                    case JsonMethodType.KeepMove:
+                        JsonObjKeepMove joKM = new JsonObjKeepMove();
+                        joKM.method = type;
+                        joKM.deviceid = "MS0002-D2000001";
+                        joKM.x = "0.5";
+                        joKM.y = "0";
+                        joKM.z = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joKM, jsonSetting);
+                        break;
+                    case JsonMethodType.StopMove:
+                        JsonObjStopMove joSM = new JsonObjStopMove();
+                        joSM.method = type;
+                        joSM.deviceid = "CMS0002-D2000001";
+                        joSM.xyz = "x";
+                        tempJsonStr = JsonConvert.SerializeObject(joSM, jsonSetting);
+                        break;
+                    case JsonMethodType.RltMove:
+                        JsonObjRltMove joRltM = new JsonObjRltMove();
+                        joRltM.method = type;
+                        joRltM.deviceid = "CMS0002-D2000001";
+                        joRltM.x = "0.5";
+                        joRltM.y = "0";
+                        joRltM.z = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joRltM, jsonSetting);
+                        break;
+                    case JsonMethodType.GetPresets:
+                        JsonObjGetPresets joGetP = new JsonObjGetPresets();
+                        joGetP.method = type;
+                        joGetP.deviceid = "CMS0002-D2000001";
+                        tempJsonStr = JsonConvert.SerializeObject(joGetP, jsonSetting);
+                        break;
+                    case JsonMethodType.SetPresets:
+                    case JsonMethodType.RemovePresets:
+                    case JsonMethodType.GotoPresets:
+                        JsonObjSetPresets joSP = new JsonObjSetPresets();
+                        joSP.method = type;
+                        joSP.deviceid = "CMS0002-D2000001";
+                        joSP.name = "预置点设置1";
+                        joSP.Token = "1";
+                        tempJsonStr = JsonConvert.SerializeObject(joSP, jsonSetting);
+                        break;
+                    case JsonMethodType.RtspRelay:
+                        JsonObjRtspRelay joRtspR = new JsonObjRtspRelay();
+                        joRtspR.method = type;
+                        joRtspR.deviceid = "CMS0001-D2000001";
+                        joRtspR.flag = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joRtspR, jsonSetting);
+                        break;
+                    case JsonMethodType.TSFileRelay:
+                        JsonObjTSFileRelay joTSFR = new JsonObjTSFileRelay();
+                        joTSFR.method = type;
+                        joTSFR.deviceid = "CMS0002/CMS0002-D2000001";
+                        joTSFR.begtime = "2017-02-17 14:10:00";
+                        joTSFR.endtime = "2017-02-17 22:10:00";
+                        tempJsonStr = JsonConvert.SerializeObject(joTSFR, jsonSetting);
+                        break;
+                    case JsonMethodType.TSFileSeekPlay:
+                        JsonObjTSFileSeekPlay joTSFSP = new JsonObjTSFileSeekPlay();
+                        joTSFSP.method = type;
+                        joTSFSP.deviceid = "CMS0002/CMS0002-D2000001";
+                        joTSFSP.videoname = "CMS0002/CMS0002-D2000001-1495705633";
+                        joTSFSP.videopos = "60";
+                        tempJsonStr = JsonConvert.SerializeObject(joTSFSP, jsonSetting);
+                        break;
+                    case JsonMethodType.DownloadFileList:
+                        JsonObjDownloadFileList joDFL = new JsonObjDownloadFileList();
+                        joDFL.method = type;
+                        joDFL.deviceid = "CMS0001-D1000001";
+                        joDFL.begtime = "2017-02-17 14:10:00";
+                        joDFL.endtime = "2017-02-17 18:10:00";
+                        tempJsonStr = JsonConvert.SerializeObject(joDFL, jsonSetting);
+                        break;
+                    case JsonMethodType.GetRelayRtsp:
+                        JsonObjGetRelayRtsp joGRR = new JsonObjGetRelayRtsp();
+                        joGRR.method = type;
+                        joGRR.deviceid = "CMS0001-D1000001";
+                        joGRR.audio = "1";
+                        joGRR.flag = "1";
+                        tempJsonStr = JsonConvert.SerializeObject(joGRR, jsonSetting);
+                        break;
+                    case JsonMethodType.AddPlan:
+                    case JsonMethodType.UpdatePlan:
+                        JsonObjAddPlan joAPlan = new JsonObjAddPlan();
+                        joAPlan.method = type;
+                        joAPlan.deviceid = "CMS0001-D2000007";
+                        joAPlan.begdate = "2017-01-18";
+                        joAPlan.enddate = "2017-01-18";
+                        joAPlan.begloop = "";
+                        joAPlan.endloop = "";
+                        joAPlan.begtime = "08:00:00";
+                        joAPlan.endtime = "18:00:00";
+                        joAPlan.loopflag = "0";
+                        joAPlan.tasktype = "0";
+                        joAPlan.userid = "test";
+                        joAPlan.planname = "巡航";
+                        tempJsonStr = JsonConvert.SerializeObject(joAPlan, jsonSetting);
+                        break;
+                    case JsonMethodType.PlanSearch:
+                        JsonObjPlanSearch joPlanS = new JsonObjPlanSearch();
+                        joPlanS.method = type;
+                        joPlanS.plan = "CMS0001-D2000007";
+                        tempJsonStr = JsonConvert.SerializeObject(joPlanS, jsonSetting);
+                        break;
+                    case JsonMethodType.ExactPlanSearch:
+                    case JsonMethodType.DeletePlan:
+                        JsonObjExactPlanSearch joEPS = new JsonObjExactPlanSearch();
+                        joEPS.method = type;
+                        joEPS.deviceid = "CMS0001-D2000007";
+                        joEPS.planname = "录像";
+                        tempJsonStr = JsonConvert.SerializeObject(joEPS, jsonSetting);
+                        break;
+                    case JsonMethodType.ClosePlan:
+                        JsonObjClosePlan joCP = new JsonObjClosePlan();
+                        joCP.method = type;
+                        joCP.deviceid = "CMS0001-D2000007";
+                        joCP.planname = "巡航";
+                        joCP.state = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joCP, jsonSetting);
+                        break;
+                    case JsonMethodType.BatAddPlan:
+                        JsonObjBatAddPlan joBAP = new JsonObjBatAddPlan();
+                        joBAP.method = type;
+                        joBAP.method = type;
+                        joBAP.deviceid = "CMS0001-D2000007";
+                        joBAP.begdate = "2017-01-18";
+                        joBAP.enddate = "2017-01-18";
+                        joBAP.begloop = ""; 
+                        joBAP.endloop = "";
+                        joBAP.begtime = "08:00:00";
+                        joBAP.endtime = "18:00:00";
+                        joBAP.loopflag = "0";
+                        joBAP.tasktype = "0";
+                        joBAP.userid = "test";
+                        arrayPlan arrPlan = new arrayPlan();
+                        arrPlan.planname = "CMS0001-D2000002";
+                        arrPlan.deviceid = "录像";
+                        tempJsonStr = JsonConvert.SerializeObject(joBAP, jsonSetting);
+                        break;
+                    case JsonMethodType.MP4Preview:
+                        JsonObjMP4Preview joMP4P = new JsonObjMP4Preview();
+                        joMP4P.method = type;
+                        joMP4P.loginid = "admin";
+                        joMP4P.loginpwd = "123456";
+                        joMP4P.url = "rtsp://admin:12345qwert@10.10.1.200/Streaming/Channels/1";
+                        tempJsonStr = JsonConvert.SerializeObject(joMP4P, jsonSetting);
+                        break;
+                    case JsonMethodType.DevicePreview:
+                        JsonObjDevicePreview joDPre = new JsonObjDevicePreview();
+                        joDPre.method = type;
+                        joDPre.deviceid = "CMS0002-D2000001";
+                        joDPre.flag = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joDPre, jsonSetting);
+                        break;
+                    case JsonMethodType.RMSConf:
+                        JsonObjRMSConf joRMSC = new JsonObjRMSConf();
+                        joRMSC.method = type;
+                        joRMSC.ip = "127.0.0.1";
+                        joRMSC.port = "1199";
+                        joRMSC.retain_time = "72";
+                        joRMSC.src_num = "9999";
+                        joRMSC.reconn_time = "30";
+                        joRMSC.save_type = "0";
+                        joRMSC.length = "30";
+                        joRMSC.section = "3";
+                        joRMSC.save_pos = "0";
+                        joRMSC.local_path = "D:\TestFolder\";
+                        joRMSC.leave_space = "80";
+                        joRMSC.over_opt = "0";
+                        tempJsonStr = JsonConvert.SerializeObject(joRMSC, jsonSetting);
+                        break;
+                    case JsonMethodType.DBConf:
+                    case JsonMethodType.CheckDB:
+                        JsonObjDBConf joDBConf = new JsonObjDBConf();
+                        joDBConf.method = type;
+                        joDBConf.ip = "127.0.0.1";
+                        joDBConf.port = "3306";
+                        joDBConf.dbname = "hedait_see_plus";
+                        joDBConf.dbuser = "hedait";
+                        joDBConf.dbpwd = "heda1t12138";
+                        tempJsonStr = JsonConvert.SerializeObject(joDBConf, jsonSetting);
+                        break;
+                    case JsonMethodType.ReStart:
+                        JsonObjReStart joReStart = new JsonObjReStart();
+                        joReStart.method = type;
+                        joReStart.server = "CMS";
+                        tempJsonStr = JsonConvert.SerializeObject(joReStart, jsonSetting);
+                        break;
+                    case JsonMethodType.AllDataSync:
+                        tempJsonStr = CreateJsonObjAllDataSync(type,jsonSetting);
+                        break;
+                    case JsonMethodType.DataSync:
+                        tempJsonStr = CreateJsonObjDataSync(type, jsonSetting);
+                        break;
                     default:
                         break;
                 }
@@ -1258,6 +1977,47 @@ namespace Util
             catch (System.Exception ex)
             {
                 return string.Format("An error occurred ", ex.Message);
+            }
+        }
+
+        private string CreateJsonObjAllDataSync(string type,JsonSerializerSettings jsonSetting)
+        {
+            try
+            {
+                JsonObjAllDataSync joADS = new JsonObjAllDataSync();
+                joADS.method = type;
+                joADS.count = "同步表数量";
+                joADS.table_1 = "同步表1的表名";
+                joADS.table_2 = "同步表2的表名";
+                joADS.table_3 = "同步表3的表名";
+                arrayDataSync1 arrDS1 = new arrayDataSync1();
+                arrayDataSync2 arrDS2 = new arrayDataSync2();
+                arrayDataSync3 arrDS3 = new arrayDataSync3();
+                joADS.array_1.Add(arrDS1);
+                joADS.array_2.Add(arrDS2);
+                joADS.array_3.Add(arrDS3);
+                return JsonConvert.SerializeObject(joADS, jsonSetting);
+            }
+            catch (System.Exception ex)
+            {
+                return "Create JAddDataSync's Json Object Failed.";
+            }
+        }
+
+        private string CreateJsonObjDataSync(string type, JsonSerializerSettings jsonSetting)
+        {
+            try
+            {
+                JsonObjDataSync joADS = new JsonObjDataSync();
+                joADS.method = type;
+                joADS.count = "同步表数量";
+                joADS.table_1 = "同步表1的表名";
+                joADS.array_1 = new List<string>() { "..."};
+                return JsonConvert.SerializeObject(joADS, jsonSetting);
+            }
+            catch (System.Exception ex)
+            {
+                return "Create JAddDataSync's Json Object Failed.";
             }
         }
 

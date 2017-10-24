@@ -2,10 +2,19 @@
 <Tree>
 	<Node Name="SystemInformation" Text="系统信息" >
 		<Node Name="Version" Text="获取系统版本" />
-		<Node Name="RunStatus" Text="获取系统运行情况" />
+		<Node Name="RunStatus" Text="获取系统运行状态Status" />
+    <Node Name="SysInfo" Text="获取系统运行情况SysInfo" />
 		<Node Name="UserLogSearch" Text="用户日志查询" />
 	</Node>
-	<Node Name="EquipmentOperation" Text="设备操作" >
+  <Node Name ="SystemConfiguration" Text="系统配置">
+    <Node Name="GetRMSConf" Text="获取录像服务器(RMS)配置" />
+    <Node Name="RMSConf" Text="录像服务器(RMS)配置" />
+    <Node Name="GetDBConf" Text="获取数据库配置" />
+    <Node Name="DBConf" Text="数据库配置" />
+    <Node Name="CheckDB" Text="测试数据库连接" />
+    <Node Name="ReStart" Text="重启服务" />
+  </Node>
+  <Node Name="EquipmentOperation" Text="设备操作" >
 		<Node Name="TongYongJieKou" Text="通用接口" >
 			<Node Name="AddDevice" Text="添加对接设备" />
 			<Node Name="AddCamera" Text="添加摄像头、麦克风" />
@@ -81,6 +90,69 @@
 		<Node Name="GetAreaDevice" Text="查询房间关联对接设备信" />
 		<Node Name="GetAreaCamera" Text="查询房间摄像头信息" />
 	</Node>
+  <Node Name ="PlatManagement" Text="下级平台管理">
+    <Node Name="AddPlat" Text="下级平台添加" />
+    <Node Name="UpdatePlat" Text="修改子平台" />
+    <Node Name="DeletePlat" Text="删除平台" />
+    <Node Name="PlatList" Text="获取平台列表" />
+    <Node Name="PlatListExact" Text="条件获取平台列表" />
+    <Node Name="PlatInfo" Text="获取当前平台信息" />
+  </Node>
+  <Node Name ="PrivilegeMangement" Text="权限管理">
+    <Node Name="AddPrivilege" Text="添加权限" />
+    <Node Name="UpdatePrivilege" Text="修改权限" />
+    <Node Name="DeletePrivilege" Text="删除权限" />
+    <Node Name="RolePrivilege" Text="获取指定角色的所有权限" />
+    <Node Name="PrivilegeDevice" Text="根据权限查询所有设备" />
+    <Node Name="GetPrivilege" Text="获取所有权限" />
+  </Node>
+  <Node Name ="RoleManagement" Text="角色管理">
+    <Node Name="AddRole" Text="添加角色" />
+    <Node Name="UpdateRole" Text="修改角色" />
+    <Node Name="DeleteRole" Text="删除角色" />
+    <Node Name="UserRole" Text="获取指定用户的所有角色" />
+    <Node Name="GetRole" Text="获取所有角色" />
+  </Node>
+  <Node Name ="GroupManagemetn" Text="组管理">
+    <Node Name="AddGroup" Text="添加组" />
+    <Node Name="UpdateGroup" Text="修改组" />
+    <Node Name="DeleteGroup" Text="删除组" />
+    <Node Name="PlatGroup" Text="获取平台下的所有组" />
+    <Node Name="GroupSearch" Text="组查询" />
+  </Node>
+  <Node Name ="PanTilt" Text="云台控制">
+    <Node Name="KeepMove" Text="移动" />
+    <Node Name="StopMove" Text="停止移动" />
+    <Node Name="RltMove" Text="相对移动" />
+    <Node Name="GetPresets" Text="获取预置点" />
+    <Node Name="SetPresets" Text="设置预置点" />
+    <Node Name="RemovePresets" Text="删除预置点" />
+    <Node Name="GotoPresets" Text="移动到预置点" />
+  </Node>
+  <Node Name ="VideoReply" Text="视频转发">
+    <Node Name="RtspRelay" Text="RTSP转发" />
+    <Node Name="RtspRelayBat" Text="RTSP批量转发" />
+    <Node Name="TSFileRelay" Text="录像文件回放" />
+    <Node Name="TSFileSeekPlay" Text="回放进度调整" />
+    <Node Name="RmsFtpInfo" Text="视频下载配置信息获取" />
+    <Node Name="DownloadFileList" Text="DownloadFileList" />
+    <Node Name="GetRelayRtsp" Text="获取设备转发地址(内部使用)" />
+  </Node>
+  <Node Name ="PlanManagement" Text="计划任务">
+    <Node Name="AddPlan" Text="添加计划" />
+    <Node Name="UpdatePlan" Text="修改计划" />
+    <Node Name="PlanSearch" Text="查询计划" />
+    <Node Name="AllPlanSearch" Text="查询所有计划" />
+    <Node Name="ExactPlanSearch" Text="精确查询计划" />
+    <Node Name="DeletePlan" Text="删除计划" />
+    <Node Name="ClosePlan" Text="启动/关闭任务计划" />
+    <Node Name="BatAddPlan" Text="批量添加计划任务" />
+  </Node>
+  <Node Name ="VideoPreview" Text="视频录像">
+    <Node Name="MP4Preview" Text="视频预览" />
+    <Node Name="DevicePreview" Text="视频预览(下级平台设备)" />
+    <Node Name="StopPreview" Text="停止预览" />
+  </Node>
 	<Node Name="UserManagement" Text="用户管理" >
 		<Node Name="AddUser" Text="添加用户" />
 		<Node Name="UpdateUser" Text="修改用户(包括权限)" />
@@ -95,4 +167,9 @@
 		<Node Name="UpdatePwd" Text="修改用户密码" />
 		<Node Name="BindUserRole" Text="绑定用户角色" />
 	</Node>
+  <Node Name ="DataSynchronism" Text="数据同步">
+    <Node Name="AllDataSync" Text="同步所有数据(内部使用)" />
+    <Node Name="DataSync" Text="同步部分数据(内部使用)" />
+    <Node Name="ReqDataSync" Text="父平台向下级请求同步数据(内部使用)" />
+  </Node>
 </Tree>

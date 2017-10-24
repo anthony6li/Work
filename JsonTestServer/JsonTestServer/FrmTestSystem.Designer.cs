@@ -50,13 +50,14 @@
             this.gb_RequestDetailOrSample = new System.Windows.Forms.GroupBox();
             this.rbt_JsonSample = new System.Windows.Forms.RadioButton();
             this.rbt_Deteil = new System.Windows.Forms.RadioButton();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.gb_RequestDetailOrSample.SuspendLayout();
             this.SuspendLayout();
             // 
             // Lbl_IP
             // 
             this.Lbl_IP.AutoSize = true;
-            this.Lbl_IP.Location = new System.Drawing.Point(281, 13);
+            this.Lbl_IP.Location = new System.Drawing.Point(346, 12);
             this.Lbl_IP.Name = "Lbl_IP";
             this.Lbl_IP.Size = new System.Drawing.Size(17, 12);
             this.Lbl_IP.TabIndex = 1;
@@ -65,7 +66,7 @@
             // Lbl_Port
             // 
             this.Lbl_Port.AutoSize = true;
-            this.Lbl_Port.Location = new System.Drawing.Point(482, 9);
+            this.Lbl_Port.Location = new System.Drawing.Point(346, 53);
             this.Lbl_Port.Name = "Lbl_Port";
             this.Lbl_Port.Size = new System.Drawing.Size(29, 12);
             this.Lbl_Port.TabIndex = 2;
@@ -73,15 +74,15 @@
             // 
             // Tb_IP
             // 
-            this.Tb_IP.Location = new System.Drawing.Point(283, 26);
+            this.Tb_IP.Location = new System.Drawing.Point(348, 29);
             this.Tb_IP.Name = "Tb_IP";
-            this.Tb_IP.Size = new System.Drawing.Size(195, 21);
+            this.Tb_IP.Size = new System.Drawing.Size(216, 21);
             this.Tb_IP.TabIndex = 3;
             this.Tb_IP.Text = "10.10.1.77";
             // 
             // Tb_Port
             // 
-            this.Tb_Port.Location = new System.Drawing.Point(484, 26);
+            this.Tb_Port.Location = new System.Drawing.Point(346, 68);
             this.Tb_Port.Name = "Tb_Port";
             this.Tb_Port.Size = new System.Drawing.Size(52, 21);
             this.Tb_Port.TabIndex = 4;
@@ -94,10 +95,10 @@
             this.tv_Method.FullRowSelect = true;
             this.tv_Method.ImageKey = "folder.png";
             this.tv_Method.ImageList = this.imageList1;
-            this.tv_Method.Location = new System.Drawing.Point(13, 43);
+            this.tv_Method.Location = new System.Drawing.Point(13, 12);
             this.tv_Method.Name = "tv_Method";
             this.tv_Method.SelectedImageIndex = 0;
-            this.tv_Method.Size = new System.Drawing.Size(229, 532);
+            this.tv_Method.Size = new System.Drawing.Size(229, 523);
             this.tv_Method.TabIndex = 8;
             this.tv_Method.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tv_Method_AfterCollapse);
             this.tv_Method.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tv_Method_AfterExpand);
@@ -128,7 +129,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtb_Data.Location = new System.Drawing.Point(250, 125);
             this.rtb_Data.Name = "rtb_Data";
-            this.rtb_Data.Size = new System.Drawing.Size(731, 193);
+            this.rtb_Data.Size = new System.Drawing.Size(492, 193);
             this.rtb_Data.TabIndex = 10;
             this.rtb_Data.Text = "";
             // 
@@ -148,13 +149,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtb_ACK.Location = new System.Drawing.Point(248, 363);
             this.rtb_ACK.Name = "rtb_ACK";
-            this.rtb_ACK.Size = new System.Drawing.Size(733, 212);
+            this.rtb_ACK.Size = new System.Drawing.Size(494, 172);
             this.rtb_ACK.TabIndex = 12;
             this.rtb_ACK.Text = "";
             // 
             // btn_POST
             // 
-            this.btn_POST.Location = new System.Drawing.Point(326, 331);
+            this.btn_POST.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_POST.Location = new System.Drawing.Point(393, 331);
             this.btn_POST.Name = "btn_POST";
             this.btn_POST.Size = new System.Drawing.Size(67, 23);
             this.btn_POST.TabIndex = 13;
@@ -164,7 +166,8 @@
             // 
             // btn_POST8
             // 
-            this.btn_POST8.Location = new System.Drawing.Point(420, 331);
+            this.btn_POST8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_POST8.Location = new System.Drawing.Point(466, 331);
             this.btn_POST8.Name = "btn_POST8";
             this.btn_POST8.Size = new System.Drawing.Size(100, 23);
             this.btn_POST8.TabIndex = 13;
@@ -174,7 +177,8 @@
             // 
             // btn_GET
             // 
-            this.btn_GET.Location = new System.Drawing.Point(551, 331);
+            this.btn_GET.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_GET.Location = new System.Drawing.Point(572, 331);
             this.btn_GET.Name = "btn_GET";
             this.btn_GET.Size = new System.Drawing.Size(82, 23);
             this.btn_GET.TabIndex = 13;
@@ -185,7 +189,7 @@
             // lb_RequestType
             // 
             this.lb_RequestType.AutoSize = true;
-            this.lb_RequestType.Location = new System.Drawing.Point(549, 9);
+            this.lb_RequestType.Location = new System.Drawing.Point(422, 53);
             this.lb_RequestType.Name = "lb_RequestType";
             this.lb_RequestType.Size = new System.Drawing.Size(53, 12);
             this.lb_RequestType.TabIndex = 14;
@@ -199,7 +203,7 @@
             "api/hedajwreq",
             "api/hedacmdreq",
             "xml/upload"});
-            this.cb_Request.Location = new System.Drawing.Point(551, 26);
+            this.cb_Request.Location = new System.Drawing.Point(424, 69);
             this.cb_Request.Name = "cb_Request";
             this.cb_Request.Size = new System.Drawing.Size(140, 20);
             this.cb_Request.TabIndex = 15;
@@ -207,19 +211,19 @@
             // 
             // btb_SaveNodesToXml
             // 
-            this.btb_SaveNodesToXml.Location = new System.Drawing.Point(5, 12);
+            this.btb_SaveNodesToXml.Location = new System.Drawing.Point(248, 26);
             this.btb_SaveNodesToXml.Name = "btb_SaveNodesToXml";
-            this.btb_SaveNodesToXml.Size = new System.Drawing.Size(100, 25);
+            this.btb_SaveNodesToXml.Size = new System.Drawing.Size(92, 25);
             this.btb_SaveNodesToXml.TabIndex = 16;
-            this.btb_SaveNodesToXml.Text = "SaveTreeToXml";
+            this.btb_SaveNodesToXml.Text = "Save Tree";
             this.btb_SaveNodesToXml.UseVisualStyleBackColor = true;
             this.btb_SaveNodesToXml.Click += new System.EventHandler(this.btb_SaveNodesToXml_Click);
             // 
             // btn_Expand
             // 
-            this.btn_Expand.Location = new System.Drawing.Point(119, 12);
+            this.btn_Expand.Location = new System.Drawing.Point(248, 66);
             this.btn_Expand.Name = "btn_Expand";
-            this.btn_Expand.Size = new System.Drawing.Size(100, 25);
+            this.btn_Expand.Size = new System.Drawing.Size(92, 25);
             this.btn_Expand.TabIndex = 17;
             this.btn_Expand.Text = "Collapse Tree";
             this.btn_Expand.UseVisualStyleBackColor = true;
@@ -229,17 +233,17 @@
             // 
             this.gb_RequestDetailOrSample.Controls.Add(this.rbt_JsonSample);
             this.gb_RequestDetailOrSample.Controls.Add(this.rbt_Deteil);
-            this.gb_RequestDetailOrSample.Location = new System.Drawing.Point(326, 69);
+            this.gb_RequestDetailOrSample.Location = new System.Drawing.Point(581, 17);
             this.gb_RequestDetailOrSample.Name = "gb_RequestDetailOrSample";
-            this.gb_RequestDetailOrSample.Size = new System.Drawing.Size(408, 50);
+            this.gb_RequestDetailOrSample.Size = new System.Drawing.Size(122, 74);
             this.gb_RequestDetailOrSample.TabIndex = 18;
             this.gb_RequestDetailOrSample.TabStop = false;
-            this.gb_RequestDetailOrSample.Text = "切换请求样式";
+            this.gb_RequestDetailOrSample.Text = "切换请求数据样式";
             // 
             // rbt_JsonSample
             // 
             this.rbt_JsonSample.AutoSize = true;
-            this.rbt_JsonSample.Location = new System.Drawing.Point(180, 28);
+            this.rbt_JsonSample.Location = new System.Drawing.Point(7, 50);
             this.rbt_JsonSample.Name = "rbt_JsonSample";
             this.rbt_JsonSample.Size = new System.Drawing.Size(71, 16);
             this.rbt_JsonSample.TabIndex = 1;
@@ -258,13 +262,13 @@
             this.rbt_Deteil.TabStop = true;
             this.rbt_Deteil.Text = "详细说明 ";
             this.rbt_Deteil.UseVisualStyleBackColor = true;
-            this.rbt_Deteil.CheckedChanged += new System.EventHandler(this.rbt_Deteil_CheckedChanged);
+            this.rbt_Deteil.CheckedChanged += new System.EventHandler(this.rbt_JsonDeteil_CheckedChanged);
             // 
             // FrmTestSystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(990, 587);
+            this.ClientSize = new System.Drawing.Size(751, 547);
             this.Controls.Add(this.gb_RequestDetailOrSample);
             this.Controls.Add(this.btn_Expand);
             this.Controls.Add(this.btb_SaveNodesToXml);
@@ -314,6 +318,7 @@
         private System.Windows.Forms.GroupBox gb_RequestDetailOrSample;
         private System.Windows.Forms.RadioButton rbt_JsonSample;
         private System.Windows.Forms.RadioButton rbt_Deteil;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
