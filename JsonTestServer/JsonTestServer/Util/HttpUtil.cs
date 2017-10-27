@@ -57,8 +57,7 @@ namespace Util
                 {
                     request.Abort();
                 }
-                MessageBox.Show(ex.Message);
-                return "";
+                throw;
             }
             finally
             {
@@ -100,9 +99,11 @@ namespace Util
                 {
                     request.Abort();
                 }
-                MessageBox.Show(ex.Message);
-                return "";
+                //MessageBox.Show(ex.Message);
+                throw;
             }
+            finally
+            { }
 
         }
 
@@ -133,10 +134,10 @@ namespace Util
                 {
                     request.Abort();
                 }
-                MessageBox.Show(ex.Message);
-                return "";
+                //MessageBox.Show(ex.Message);
+                throw;
             }
-
+            finally { }
         }
 
         /// <summary>
@@ -1036,10 +1037,10 @@ namespace Util
                         tempJsonStr = JsonConvert.SerializeObject(joReStart, jsonSetting);
                         break;
                     case JsonMethodType.AllDataSync:
-                        tempJsonStr = CreateJsonObjAllDataSync(type, jsonSetting);
+                        tempJsonStr = CreateJsonObjAllDataSync(type, jsonSetting,true);
                         break;
                     case JsonMethodType.DataSync:
-                        tempJsonStr = CreateJsonObjDataSync(type, jsonSetting);
+                        tempJsonStr = CreateJsonObjDataSync(type, jsonSetting,true);
                         break;
                     default:
                         break;
@@ -1939,7 +1940,7 @@ namespace Util
                         joRMSC.length = "30";
                         joRMSC.section = "3";
                         joRMSC.save_pos = "0";
-                        joRMSC.local_path = "D:\TestFolder\";
+                        joRMSC.local_path = @"D:\TestFolder\";
                         joRMSC.leave_space = "80";
                         joRMSC.over_opt = "0";
                         tempJsonStr = JsonConvert.SerializeObject(joRMSC, jsonSetting);
@@ -1962,10 +1963,10 @@ namespace Util
                         tempJsonStr = JsonConvert.SerializeObject(joReStart, jsonSetting);
                         break;
                     case JsonMethodType.AllDataSync:
-                        tempJsonStr = CreateJsonObjAllDataSync(type,jsonSetting);
+                        tempJsonStr = CreateJsonObjAllDataSync(type,jsonSetting,false);
                         break;
                     case JsonMethodType.DataSync:
-                        tempJsonStr = CreateJsonObjDataSync(type, jsonSetting);
+                        tempJsonStr = CreateJsonObjDataSync(type, jsonSetting,false);
                         break;
                     default:
                         break;
@@ -1980,22 +1981,71 @@ namespace Util
             }
         }
 
-        private string CreateJsonObjAllDataSync(string type,JsonSerializerSettings jsonSetting)
+        private string CreateJsonObjAllDataSync(string type,JsonSerializerSettings jsonSetting, bool isDetail)
         {
             try
             {
                 JsonObjAllDataSync joADS = new JsonObjAllDataSync();
                 joADS.method = type;
-                joADS.count = "同步表数量";
-                joADS.table_1 = "同步表1的表名";
-                joADS.table_2 = "同步表2的表名";
-                joADS.table_3 = "同步表3的表名";
                 arrayDataSync1 arrDS1 = new arrayDataSync1();
                 arrayDataSync2 arrDS2 = new arrayDataSync2();
                 arrayDataSync3 arrDS3 = new arrayDataSync3();
-                joADS.array_1.Add(arrDS1);
-                joADS.array_2.Add(arrDS2);
-                joADS.array_3.Add(arrDS3);
+                if (isDetail)
+                {
+                    joADS.count = "同步表数量";
+                    joADS.table_1 = "同步表1的表名";
+                    joADS.table_2 = "同步表2的表名";
+                    joADS.table_3 = "同步表3的表名";
+                    joADS.array_1.Add(arrDS1);
+                    joADS.array_2.Add(arrDS2);
+                    joADS.array_3.Add(arrDS3);
+                }
+                else
+                {
+                    joADS.count = "3";
+                    joADS.table_1 = "t_platform";
+                    joADS.table_2 = "t_group";
+                    joADS.table_3 = "t_device";
+                    arrDS1.bsoid = "AB1F911B73CE407F9128439E247E3439";
+                    arrDS1.createtime = "2016-12-26 00:00:00";
+                    arrDS1.updatetime = "2016-12-26 00:00:00";
+                    arrDS1.platformid = "CMS0002";
+                    arrDS1.platformname = "195平台";
+                    arrDS1.parentplatformid = "CMS0001";
+                    arrDS1.childplatformid = "";
+                    arrDS1.ip = "10.10.1.195";
+                    arrDS1.port = "8080";
+                    arrDS1.lvl = "0";
+                    arrDS2.bsoid = "B43F74A6DF4E4E098394811919D14A32";
+                    arrDS2.createtime = "2016-12-26 00:00:00";
+                    arrDS2.updatetime = "2016-12-26 00:00:00";
+                    arrDS2.groupid = "CMS0002-GP000002";
+                    arrDS2.groupname = "设备组";
+                    arrDS2.parentgroup = "CMS0002-GP000002";
+                    arrDS2.platformID = "AB1F911B73CE407F9128439E247E3439";
+                    arrDS3.bsoid = "A2C7C9D80AF04885BF03F2776C91CD21";
+                    arrDS3.createtime = "2016-12-26 00:00:00";
+                    arrDS3.updatetime = "2016-12-26 00:00:00";
+                    arrDS3.deviceid = "CMS0002-D2000001";
+                    arrDS3.devicetype = "2";
+                    arrDS3.devicegroup = "B43F74A6DF4E4E098394811919D14A32";
+                    arrDS3.owendplatform = "AB1F911B73CE407F9128439E247E3439";
+                    arrDS3.correlation = "";
+                    arrDS3.devicename = "设备名1";
+                    arrDS3.deviceloginname = "admin";
+                    arrDS3.deviceloginpassword = "12345qwert";
+                    arrDS3.serverIP = "10.10.1.200";
+                    arrDS3.RTSPport = "554";
+                    arrDS3.mainRTSPaddr = "rtsp://admin:12345qwert@10.10.1.200/Streaming/Channels/1";
+                    arrDS3.auxRTSPaddr = "rtsp://admin:12345qwert@10.10.1.200/Streaming/Channels/1";
+                    arrDS3.flag = "0";
+                    arrDS3.devicestate = "可用";
+                    arrDS3.devicenote = "备注";
+                    joADS.array_1.Add(arrDS1);
+                    joADS.array_2.Add(arrDS2);
+                    joADS.array_3.Add(arrDS3);
+
+                }
                 return JsonConvert.SerializeObject(joADS, jsonSetting);
             }
             catch (System.Exception ex)
@@ -2004,15 +2054,18 @@ namespace Util
             }
         }
 
-        private string CreateJsonObjDataSync(string type, JsonSerializerSettings jsonSetting)
+        private string CreateJsonObjDataSync(string type, JsonSerializerSettings jsonSetting,bool isDetail)
         {
             try
             {
                 JsonObjDataSync joADS = new JsonObjDataSync();
                 joADS.method = type;
-                joADS.count = "同步表数量";
-                joADS.table_1 = "同步表1的表名";
-                joADS.array_1 = new List<string>() { "..."};
+                if (isDetail)
+                {
+                    joADS.count = "同步表数量";
+                    joADS.table_1 = "同步表1的表名";
+                    joADS.array_1 = new List<string>() { "..." };
+                }
                 return JsonConvert.SerializeObject(joADS, jsonSetting);
             }
             catch (System.Exception ex)

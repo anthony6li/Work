@@ -131,7 +131,7 @@
   </Node>
   <Node Name ="VideoReply" Text="视频转发">
     <Node Name="RtspRelay" Text="RTSP转发" />
-    <Node Name="RtspRelayBat" Text="RTSP批量转发" />
+    <Node Name="RtspRelay" Text="RTSP批量转发" />
     <Node Name="TSFileRelay" Text="录像文件回放" />
     <Node Name="TSFileSeekPlay" Text="回放进度调整" />
     <Node Name="RmsFtpInfo" Text="视频下载配置信息获取" />

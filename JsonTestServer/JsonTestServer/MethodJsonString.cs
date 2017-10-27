@@ -57,8 +57,7 @@ namespace JsonTestServer
         RemovePresets,      //删除预置点
         GotoPresets,        //移动到预置点
         //视频转发
-        RtspRelay,          //RTSP转发
-        RtspRelayBat,       //RTSP批量转发
+        RtspRelay,          //RTSP转发/RTSP批量转发
         TSFileRelay,        //录像文件回放
         TSFileSeekPlay,     //回放进度调整
         RmsFtpInfo,         //视频下载配置信息获取
@@ -265,6 +264,8 @@ namespace JsonTestServer
         public string deviceloginpassword;
         public string serverIP;
         public string RTSPport;
+        public string mainRTSPaddr;
+        public string auxRTSPaddr;
         public string flag;
         public string devicestate;
         public string devicenote;
@@ -426,11 +427,11 @@ namespace JsonTestServer
         public string devicename { get; set; }
         public string delrecord { get; set; }
 
-        public HedaACK m_hedaAck = new HedaACK();
+        private HedaACK m_hedaAck = new HedaACK();
         /// <summary>
         /// 返回的正确应答格式
         /// </summary>
-        public HedaACK hedaAck
+        private HedaACK hedaAck
         {
             get
             {
@@ -468,11 +469,11 @@ namespace JsonTestServer
         public string chipin_count { get; set; }    //电源时序器插口数量
         public string channel_count { get; set; }   //同录或CVR或智能分析仪通道数量
 
-        public HedaACK m_hedaAck = new HedaACK();
+        private HedaACK m_hedaAck = new HedaACK();
         /// <summary>
         /// 返回的正确应答格式
         /// </summary>
-        public HedaACK hedaAck
+        private HedaACK hedaAck
         {
             get
             {
@@ -514,31 +515,6 @@ namespace JsonTestServer
         public string note { get; set; }   //备注
         public string mic { get; set; }   //拾音器
         public string radio { get; set; }   //扬声器
-
-        //public HedaACK m_hedaAck = new HedaACK();
-        ///// <summary>
-        ///// 返回的正确应答格式
-        ///// </summary>
-        //public HedaACK hedaAck
-        //{
-        //    get
-        //    {
-        //        m_hedaAck.Body = new Body()
-        //        {
-        //            r_main_rtsp = "rtsp://10.10.1.194:554/CMS0001-D2000002-0_VEDIO.sdp",
-        //            r_aux_rtsp = "rtsp://10.10.1.194:554/CMS0001-D2000002-1_VEDIO.sdp",
-        //            retCode = "0",
-        //            retMsg = "添加设备成功"
-        //        };
-        //        m_hedaAck.Header = new Header()
-        //        {
-        //            MessageType = "MSG_SC_DEICE_MGR_ACK",
-        //            Version = "1.0"
-        //        };
-        //        return m_hedaAck;
-        //    }
-        //    set { m_hedaAck = value; }
-        //}
     }
 
     /// <summary>
@@ -1510,7 +1486,7 @@ namespace JsonTestServer
     }
     #endregion
 
-    #region Json ACK 待定，尚未使用
+    #region Json ACK 
     public class Body
     {
         /// <summary>

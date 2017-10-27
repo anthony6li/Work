@@ -23,8 +23,14 @@ namespace JsonTestServer
             detail,
             sample
         };
+        public enum ackStyle
+        {
+            expected,
+            actual,
+        };
 
         public requestStyle reqStyle = requestStyle.detail;
+        public ackStyle ackSty = ackStyle.actual;
         //XML每行的内容
         private string xmlLine = "";
 
@@ -36,7 +42,7 @@ namespace JsonTestServer
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
-            this.lb_Data.Text = string.Format("数据（{0}）：",rbt_Deteil.Text);
+            this.lb_Data.Text = string.Format("数据（{0}）：", rbt_Deteil.Text);
             this.tv_Method.ExpandAll();
             doc.Load("Resource\\TreeXml.xml");
             //doc.Load(Properties.Resources.TreeXml); 
@@ -52,21 +58,42 @@ namespace JsonTestServer
         {
             string strUrl = GetUrlString();
             string postdata = this.rtb_Data.Text;
-            this.rtb_ACK.Text = htmlUtil.HttpPost(strUrl, postdata);
+            try
+            {
+                this.rtb_ACK.Text = htmlUtil.HttpPost(strUrl, postdata);
+            }
+            catch (System.Exception ex)
+            {
+                updateDateToRTB(ex.Message);
+            }
         }
 
         private void btn_POST8_Click(object sender, EventArgs e)
         {
             string strUrl = GetUrlString();
             string postdata = this.rtb_Data.Text;
+            try
+            {
             this.rtb_ACK.Text = htmlUtil.HttpPostUTF8(strUrl, postdata);
+            }
+            catch (System.Exception ex)
+            {
+                updateDateToRTB(ex.Message);
+            }
         }
 
         private void btn_GET_Click(object sender, EventArgs e)
         {
             string strUrl = GetUrlString();
             string postdata = this.rtb_Data.Text;
-            this.rtb_ACK.Text = htmlUtil.HttpGet(strUrl, postdata);
+            try
+            {
+                this.rtb_ACK.Text = htmlUtil.HttpGet(strUrl, postdata);
+            }
+            catch (System.Exception ex)
+            {
+                updateDateToRTB(ex.Message);
+            }
         }
 
         private string GetUrlString()
@@ -104,42 +131,10 @@ namespace JsonTestServer
             }
             else
             {
-                this.rtb_Data.Text = string.Format("请选择【{0}】的子节点获取请求Json模板。",e.Node.Text);
+                this.rtb_Data.Text = string.Format("请选择【{0}】的子节点获取请求Json模板。", e.Node.Text);
             }
         }
 
-        private void updateDateToRTB(string type)
-        {
-            if (Enum.IsDefined(typeof(JsonMethodType), type))
-            {
-                string temp = string.Empty;
-                //暂时支持Request为详情和用例两种样式
-                switch (reqStyle)
-                {
-                    case requestStyle.detail:
-                        temp = htmlUtil.JsonDetailStringCreator(type);
-                        break;
-                    case requestStyle.sample:
-                        temp = htmlUtil.JsonSampleStringCreator(type);
-                        break;
-                    default:
-                        break;
-                }
-                if ((temp.StartsWith("http://") && temp.EndsWith(JsonRequestType.upload.ToString())))
-                {
-                    this.rtb_Data.Text = "请访问：\r\n";
-                    this.rtb_Data.Text += string.Format(temp, this.Tb_IP.Text, this.Tb_Port.Text);
-                }
-                else
-                {
-                    this.rtb_Data.Text = temp;
-                }
-            }
-            else
-            {
-                this.rtb_Data.Text = string.Empty;
-            }
-        }
 
         private void btb_SaveNodesToXml_Click(object sender, EventArgs e)
         {
@@ -148,7 +143,7 @@ namespace JsonTestServer
                 string localFilePath = "";
                 string fileNameExt = "";
                 string newFileName = "";
-                    string FilePath = "";
+                string FilePath = "";
                 saveFileDialog1.Filter = "Xml files(*.xml)|*.xml|txt files(*.txt)|*.txt|All files(*.*)|*.*";
                 saveFileDialog1.FileName = "TreeXml";
                 saveFileDialog1.DefaultExt = "xml";
@@ -184,6 +179,8 @@ namespace JsonTestServer
             }
             catch (Exception ex)
             {
+                this.rtb_ACK.Text = "Save Tree Failed.";
+                this.rtb_ACK.Text += ex.ToString();
             }
         }
 
@@ -275,8 +272,11 @@ namespace JsonTestServer
         private void rbt_JsonDeteil_CheckedChanged(object sender, EventArgs e)
         {
             reqStyle = requestStyle.detail;
-            updateDateToRTB(this.tv_Method.SelectedNode.Name);
-            lb_Data.Text = string.Format("数据（{0}）：",rbt_Deteil.Text);
+            if (this.tv_Method.SelectedNode != null)
+            {
+                updateDateToRTB(this.tv_Method.SelectedNode.Name);
+            }
+            lb_Data.Text = string.Format("数据（{0}）：", rbt_Deteil.Text);
         }
 
         /// <summary>
@@ -287,8 +287,86 @@ namespace JsonTestServer
         private void rbt_JsonSample_CheckedChanged(object sender, EventArgs e)
         {
             reqStyle = requestStyle.sample;
-            updateDateToRTB(this.tv_Method.SelectedNode.Name);
+            if (this.tv_Method.SelectedNode != null)
+            {
+                updateDateToRTB(this.tv_Method.SelectedNode.Name);
+            }
             lb_Data.Text = string.Format("数据（{0}）：", rbt_JsonSample.Text);
+        }
+
+        string temp = string.Empty;
+        private void rbtn_ActualACK_CheckedChanged(object sender, EventArgs e)
+        {
+            ackSty = ackStyle.actual;
+            if (!string.IsNullOrEmpty(temp))
+            {
+                rtb_ACK.Text = temp;
+            }
+            else
+            {
+                rtb_ACK.Text = "请发起请求（POST/POST-UTF8/GET）";
+            }
+        }
+
+        private void rbtn_ExpectedACK_CheckedChanged(object sender, EventArgs e)
+        {
+            ackSty = ackStyle.expected;
+            if (!string.IsNullOrEmpty(this.rtb_ACK.Text))
+            {
+                temp = this.rtb_ACK.Text;
+            }
+            //提供期待结果
+            updateACKToRTB();
+        }
+
+        /// <summary>
+        /// 显示数据RichTextBox的文本
+        /// </summary>
+        /// <param name="type">JsonMethodType</param>
+        private void updateDateToRTB(string type)
+        {
+            if (!string.IsNullOrEmpty(type))
+            {
+                //如果传递的是JsonMethodType，传递相应的JsonString至数据RichTextBox
+                //如果不不是，则输出文本信息到应答RichTextBox
+                if (Enum.IsDefined(typeof(JsonMethodType), type))
+                {
+                    string temp = string.Empty;
+                    //暂时支持Request为详情和用例两种样式
+                    switch (reqStyle)
+                    {
+                        case requestStyle.detail:
+                            temp = htmlUtil.JsonDetailStringCreator(type);
+                            break;
+                        case requestStyle.sample:
+                            temp = htmlUtil.JsonSampleStringCreator(type);
+                            break;
+                        default:
+                            break;
+                    }
+                    if ((temp.StartsWith("http://") && temp.EndsWith(JsonRequestType.upload.ToString())))
+                    {
+                        this.rtb_Data.Text = "请访问：\r\n";
+                        this.rtb_Data.Text += string.Format(temp, this.Tb_IP.Text, this.Tb_Port.Text);
+                    }
+                    else
+                    {
+                        this.rtb_Data.Text = temp;
+                    }
+                }
+                else
+                {
+                    this.rtb_ACK.Text = type;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 显示应答RichTextBox的文本
+        /// </summary>
+        /// <param name="type"></param>
+        private void updateACKToRTB()
+        {
         }
     }
 }

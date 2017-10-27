@@ -51,7 +51,11 @@
             this.rbt_JsonSample = new System.Windows.Forms.RadioButton();
             this.rbt_Deteil = new System.Windows.Forms.RadioButton();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.gb_ACK_Expected = new System.Windows.Forms.GroupBox();
+            this.rbtn_ExpectedACK = new System.Windows.Forms.RadioButton();
+            this.rbtn_ActualACK = new System.Windows.Forms.RadioButton();
             this.gb_RequestDetailOrSample.SuspendLayout();
+            this.gb_ACK_Expected.SuspendLayout();
             this.SuspendLayout();
             // 
             // Lbl_IP
@@ -75,16 +79,18 @@
             // Tb_IP
             // 
             this.Tb_IP.Location = new System.Drawing.Point(348, 29);
+            this.Tb_IP.Multiline = true;
             this.Tb_IP.Name = "Tb_IP";
-            this.Tb_IP.Size = new System.Drawing.Size(216, 21);
+            this.Tb_IP.Size = new System.Drawing.Size(163, 20);
             this.Tb_IP.TabIndex = 3;
             this.Tb_IP.Text = "10.10.1.77";
             // 
             // Tb_Port
             // 
             this.Tb_Port.Location = new System.Drawing.Point(346, 68);
+            this.Tb_Port.Multiline = true;
             this.Tb_Port.Name = "Tb_Port";
-            this.Tb_Port.Size = new System.Drawing.Size(52, 21);
+            this.Tb_Port.Size = new System.Drawing.Size(43, 20);
             this.Tb_Port.TabIndex = 4;
             this.Tb_Port.Text = "9905";
             // 
@@ -189,7 +195,7 @@
             // lb_RequestType
             // 
             this.lb_RequestType.AutoSize = true;
-            this.lb_RequestType.Location = new System.Drawing.Point(422, 53);
+            this.lb_RequestType.Location = new System.Drawing.Point(393, 52);
             this.lb_RequestType.Name = "lb_RequestType";
             this.lb_RequestType.Size = new System.Drawing.Size(53, 12);
             this.lb_RequestType.TabIndex = 14;
@@ -202,16 +208,16 @@
             this.cb_Request.Items.AddRange(new object[] {
             "api/hedajwreq",
             "api/hedacmdreq",
+            "api/sysinfo",
             "xml/upload"});
-            this.cb_Request.Location = new System.Drawing.Point(424, 69);
+            this.cb_Request.Location = new System.Drawing.Point(395, 68);
             this.cb_Request.Name = "cb_Request";
-            this.cb_Request.Size = new System.Drawing.Size(140, 20);
+            this.cb_Request.Size = new System.Drawing.Size(116, 20);
             this.cb_Request.TabIndex = 15;
-            this.cb_Request.Text = "api/hedajwreq";
             // 
             // btb_SaveNodesToXml
             // 
-            this.btb_SaveNodesToXml.Location = new System.Drawing.Point(248, 26);
+            this.btb_SaveNodesToXml.Location = new System.Drawing.Point(248, 24);
             this.btb_SaveNodesToXml.Name = "btb_SaveNodesToXml";
             this.btb_SaveNodesToXml.Size = new System.Drawing.Size(92, 25);
             this.btb_SaveNodesToXml.TabIndex = 16;
@@ -221,7 +227,7 @@
             // 
             // btn_Expand
             // 
-            this.btn_Expand.Location = new System.Drawing.Point(248, 66);
+            this.btn_Expand.Location = new System.Drawing.Point(248, 63);
             this.btn_Expand.Name = "btn_Expand";
             this.btn_Expand.Size = new System.Drawing.Size(92, 25);
             this.btn_Expand.TabIndex = 17;
@@ -233,12 +239,12 @@
             // 
             this.gb_RequestDetailOrSample.Controls.Add(this.rbt_JsonSample);
             this.gb_RequestDetailOrSample.Controls.Add(this.rbt_Deteil);
-            this.gb_RequestDetailOrSample.Location = new System.Drawing.Point(581, 17);
+            this.gb_RequestDetailOrSample.Location = new System.Drawing.Point(532, 14);
             this.gb_RequestDetailOrSample.Name = "gb_RequestDetailOrSample";
-            this.gb_RequestDetailOrSample.Size = new System.Drawing.Size(122, 74);
+            this.gb_RequestDetailOrSample.Size = new System.Drawing.Size(93, 74);
             this.gb_RequestDetailOrSample.TabIndex = 18;
             this.gb_RequestDetailOrSample.TabStop = false;
-            this.gb_RequestDetailOrSample.Text = "切换请求数据样式";
+            this.gb_RequestDetailOrSample.Text = "请求数据样式";
             // 
             // rbt_JsonSample
             // 
@@ -264,11 +270,47 @@
             this.rbt_Deteil.UseVisualStyleBackColor = true;
             this.rbt_Deteil.CheckedChanged += new System.EventHandler(this.rbt_JsonDeteil_CheckedChanged);
             // 
+            // gb_ACK_Expected
+            // 
+            this.gb_ACK_Expected.Controls.Add(this.rbtn_ExpectedACK);
+            this.gb_ACK_Expected.Controls.Add(this.rbtn_ActualACK);
+            this.gb_ACK_Expected.Location = new System.Drawing.Point(641, 14);
+            this.gb_ACK_Expected.Name = "gb_ACK_Expected";
+            this.gb_ACK_Expected.Size = new System.Drawing.Size(98, 74);
+            this.gb_ACK_Expected.TabIndex = 19;
+            this.gb_ACK_Expected.TabStop = false;
+            this.gb_ACK_Expected.Text = "请求应答样式";
+            // 
+            // rbtn_ExpectedACK
+            // 
+            this.rbtn_ExpectedACK.AutoSize = true;
+            this.rbtn_ExpectedACK.Location = new System.Drawing.Point(6, 50);
+            this.rbtn_ExpectedACK.Name = "rbtn_ExpectedACK";
+            this.rbtn_ExpectedACK.Size = new System.Drawing.Size(71, 16);
+            this.rbtn_ExpectedACK.TabIndex = 0;
+            this.rbtn_ExpectedACK.Text = "期待结果";
+            this.rbtn_ExpectedACK.UseVisualStyleBackColor = true;
+            this.rbtn_ExpectedACK.CheckedChanged += new System.EventHandler(this.rbtn_ExpectedACK_CheckedChanged);
+            // 
+            // rbtn_ActualACK
+            // 
+            this.rbtn_ActualACK.AutoSize = true;
+            this.rbtn_ActualACK.Checked = true;
+            this.rbtn_ActualACK.Location = new System.Drawing.Point(6, 28);
+            this.rbtn_ActualACK.Name = "rbtn_ActualACK";
+            this.rbtn_ActualACK.Size = new System.Drawing.Size(71, 16);
+            this.rbtn_ActualACK.TabIndex = 0;
+            this.rbtn_ActualACK.TabStop = true;
+            this.rbtn_ActualACK.Text = "实际结果";
+            this.rbtn_ActualACK.UseVisualStyleBackColor = true;
+            this.rbtn_ActualACK.CheckedChanged += new System.EventHandler(this.rbtn_ActualACK_CheckedChanged);
+            // 
             // FrmTestSystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 547);
+            this.Controls.Add(this.gb_ACK_Expected);
             this.Controls.Add(this.gb_RequestDetailOrSample);
             this.Controls.Add(this.btn_Expand);
             this.Controls.Add(this.btb_SaveNodesToXml);
@@ -292,6 +334,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.gb_RequestDetailOrSample.ResumeLayout(false);
             this.gb_RequestDetailOrSample.PerformLayout();
+            this.gb_ACK_Expected.ResumeLayout(false);
+            this.gb_ACK_Expected.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,6 +363,9 @@
         private System.Windows.Forms.RadioButton rbt_JsonSample;
         private System.Windows.Forms.RadioButton rbt_Deteil;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.GroupBox gb_ACK_Expected;
+        private System.Windows.Forms.RadioButton rbtn_ActualACK;
+        private System.Windows.Forms.RadioButton rbtn_ExpectedACK;
     }
 }
 
