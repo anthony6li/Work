@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Tree>
+		<Node Name="Version" Text="获取系统版本" />
+		<Node Name="RunStatus" Text="获取系统运行状态Status" />
+    <Node Name="PlatList" Text="获取平台列表" />
+    <Node Name="PlatInfo" Text="获取当前平台信息" />
+    <Node Name="RmsFtpInfo" Text="视频下载配置信息获取" />
+    <Node Name="AllPlanSearch" Text="查询所有计划" />
+    <Node Name="StopPreview" Text="停止预览" />
+  
+</Tree>

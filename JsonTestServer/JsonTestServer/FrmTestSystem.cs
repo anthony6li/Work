@@ -74,7 +74,7 @@ namespace JsonTestServer
             string postdata = this.rtb_Data.Text;
             try
             {
-            this.rtb_ACK.Text = htmlUtil.HttpPostUTF8(strUrl, postdata);
+                this.rtb_ACK.Text = htmlUtil.HttpPostUTF8(strUrl, postdata);
             }
             catch (System.Exception ex)
             {
@@ -367,6 +367,43 @@ namespace JsonTestServer
         /// <param name="type"></param>
         private void updateACKToRTB()
         {
+        }
+
+        /// <summary>
+        /// 为控件显示ToolsTips
+        /// </summary>
+        /// <param name="sender">控件对象</param>
+        /// <param name="str">ToolTips显示的内容</param>
+        private void ShowToolTipMouseEnter(object sender, string str)
+        {
+            ToolTip tt = new ToolTip();
+            tt.ShowAlways = true;
+            tt.SetToolTip((Control)sender, str);
+        }
+
+        private void btb_SaveNodesToXml_MouseEnter(object sender, EventArgs e)
+        {
+            ShowToolTipMouseEnter(sender, "保存左侧目录树所有内容为Xml文件至自定义路径。");
+        }
+
+        private void btn_Expand_MouseEnter(object sender, EventArgs e)
+        {
+            ShowToolTipMouseEnter(sender, "收缩或展开左侧目录树。");
+        }
+
+        private void Tb_IP_MouseEnter(object sender, EventArgs e)
+        {
+            ShowToolTipMouseEnter(sender, "测试服务器的IP地址");
+        }
+
+        private void gb_RequestDetailOrSample_MouseHover(object sender, EventArgs e)
+        {
+            ShowToolTipMouseEnter(sender, "切换请求数据窗口内的的文本格式\r\n（请求的详细说明或者请求的实例样例）");
+        }
+
+        private void gb_ACK_Expected_MouseHover(object sender, EventArgs e)
+        {
+            ShowToolTipMouseEnter(sender, "切换返回的数据窗口内的文本格式\r\n（期待结果还是实际结果）");
         }
     }
 }

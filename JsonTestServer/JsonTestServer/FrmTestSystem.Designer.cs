@@ -84,6 +84,7 @@
             this.Tb_IP.Size = new System.Drawing.Size(163, 20);
             this.Tb_IP.TabIndex = 3;
             this.Tb_IP.Text = "10.10.1.77";
+            this.Tb_IP.MouseEnter += new System.EventHandler(this.Tb_IP_MouseEnter);
             // 
             // Tb_Port
             // 
@@ -116,9 +117,9 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "folder.png");
             this.imageList1.Images.SetKeyName(1, "folder_heart.png");
-            this.imageList1.Images.SetKeyName(2, "folder_key.png");
-            this.imageList1.Images.SetKeyName(3, "folder_delete.png");
-            this.imageList1.Images.SetKeyName(4, "folder_edit.png");
+            //this.imageList1.Images.SetKeyName(2, "folder_key.png");
+            //this.imageList1.Images.SetKeyName(3, "folder_delete.png");
+            //this.imageList1.Images.SetKeyName(4, "folder_edit.png");
             // 
             // lb_Data
             // 
@@ -214,6 +215,7 @@
             this.cb_Request.Name = "cb_Request";
             this.cb_Request.Size = new System.Drawing.Size(116, 20);
             this.cb_Request.TabIndex = 15;
+            this.cb_Request.Text = "api/hedajwreq";
             // 
             // btb_SaveNodesToXml
             // 
@@ -224,6 +226,7 @@
             this.btb_SaveNodesToXml.Text = "Save Tree";
             this.btb_SaveNodesToXml.UseVisualStyleBackColor = true;
             this.btb_SaveNodesToXml.Click += new System.EventHandler(this.btb_SaveNodesToXml_Click);
+            this.btb_SaveNodesToXml.MouseEnter += new System.EventHandler(this.btb_SaveNodesToXml_MouseEnter);
             // 
             // btn_Expand
             // 
@@ -234,6 +237,7 @@
             this.btn_Expand.Text = "Collapse Tree";
             this.btn_Expand.UseVisualStyleBackColor = true;
             this.btn_Expand.Click += new System.EventHandler(this.btn_Expand_Click);
+            this.btn_Expand.MouseEnter += new System.EventHandler(this.btn_Expand_MouseEnter);
             // 
             // gb_RequestDetailOrSample
             // 
@@ -245,6 +249,7 @@
             this.gb_RequestDetailOrSample.TabIndex = 18;
             this.gb_RequestDetailOrSample.TabStop = false;
             this.gb_RequestDetailOrSample.Text = "请求数据样式";
+            this.gb_RequestDetailOrSample.MouseHover += new System.EventHandler(this.gb_RequestDetailOrSample_MouseHover);
             // 
             // rbt_JsonSample
             // 
@@ -280,6 +285,7 @@
             this.gb_ACK_Expected.TabIndex = 19;
             this.gb_ACK_Expected.TabStop = false;
             this.gb_ACK_Expected.Text = "请求应答样式";
+            this.gb_ACK_Expected.MouseHover += new System.EventHandler(this.gb_ACK_Expected_MouseHover);
             // 
             // rbtn_ExpectedACK
             // 
