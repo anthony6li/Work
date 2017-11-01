@@ -56,6 +56,14 @@ namespace NetClient
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string strUrl = "http://114.215.236.123:17922/router/log/download?callback=jQuery11020283594865984004_1508287346059&logs%5B0%5D%5Buserid%5D=22718969&logs%5B0%5D%5Bsoftid%5D=6749647&_=1508287346063";
+
+            string temp = htmlutil.HttpGet(strUrl);
+            this.richTextBox_ack.Text = string.IsNullOrEmpty(temp) ? "啥也没反馈啊！" : temp;
+
+        }
     }
 
     

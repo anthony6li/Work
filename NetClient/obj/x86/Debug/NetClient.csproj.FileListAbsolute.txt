@@ -28,3 +28,10 @@ C:\Users\nthon\Documents\Visual Studio 2015\Projects\NetClient\obj\x86\Debug\Net
 C:\Users\nthon\Documents\Visual Studio 2015\Projects\NetClient\obj\x86\Debug\NetClient.csproj.GenerateResource.Cache
 X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.exe
 X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.pdb
+X:\Users\enjoy\Desktop\AR\Work\NetClient\bin\Debug\NetClient.exe
+X:\Users\enjoy\Desktop\AR\Work\NetClient\bin\Debug\NetClient.pdb
+X:\Users\enjoy\Desktop\AR\Work\NetClient\bin\Debug\Newtonsoft.Json.dll
+X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.csprojResolveAssemblyReference.cache
+X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.MainForm.resources
+X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.Properties.Resources.resources
+X:\Users\enjoy\Desktop\AR\Work\NetClient\obj\x86\Debug\NetClient.csproj.GenerateResource.Cache

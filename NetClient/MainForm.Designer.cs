@@ -38,6 +38,7 @@
             this.richTextBox_ack = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button_postutf8 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -121,11 +122,22 @@
             this.button_postutf8.UseVisualStyleBackColor = true;
             this.button_postutf8.Click += new System.EventHandler(this.button_postutf8_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(680, 150);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(81, 54);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(657, 480);
+            this.ClientSize = new System.Drawing.Size(773, 480);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.button_postutf8);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.richTextBox_ack);
@@ -157,6 +169,7 @@
         private System.Windows.Forms.RichTextBox richTextBox_ack;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button_postutf8;
+        private System.Windows.Forms.Button button1;
     }
 }
 

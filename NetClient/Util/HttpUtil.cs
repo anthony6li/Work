@@ -111,6 +111,34 @@ namespace Util
 
         }
 
+        public string HttpGet(string Url)
+        {
+            string retString = string.Empty;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+                request.Method = "GET";
+                request.ContentType = "text/html;charset=UTF-8";
+                request.KeepAlive = true;
+                request.Accept = "zh-CN";
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0; SE 2.X MetaSr 1.0) like Gecko";
+                request.Referer = "http://www.zxxk.com/soft/6749647.html";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream myResponseStream = response.GetResponseStream();
+                //StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
+                retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                myResponseStream.Close();
 
+                return retString;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return "";
+            }
+
+        }
     }
 }
