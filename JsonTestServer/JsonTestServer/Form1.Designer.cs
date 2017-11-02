@@ -117,6 +117,7 @@
             this.ClientSize = new System.Drawing.Size(798, 642);
             this.Controls.Add(this.pl_MainForm);
             this.Controls.Add(this.menuStrip2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form1";
             this.Text = "辽源JW项目测试系统";
             this.Load += new System.EventHandler(this.Form1_Load);

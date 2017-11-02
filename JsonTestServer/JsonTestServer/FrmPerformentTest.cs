@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using Util;
+using System.Threading;
 
 namespace JsonTestServer
 {
@@ -16,6 +17,14 @@ namespace JsonTestServer
     {
         HttpUtil htmlUtil = new HttpUtil();
         XmlDocument doc = new XmlDocument();
+        private BackgroundWorker processBGWorker = new BackgroundWorker();
+        private enum BtnRequestType
+        {
+            POST,
+            POSTUTF8,
+            GET,
+        }
+
         public enum requestStyle
         {
             detail,
@@ -38,6 +47,13 @@ namespace JsonTestServer
         {
             try
             {
+                EnableRequestButton(false);
+                //后台更新进程
+                processBGWorker.DoWork += ProcessBGWorker_DoWork;
+                processBGWorker.WorkerReportsProgress = true;
+                processBGWorker.ProgressChanged += ProcessBGWorker_ProgressChanged;
+                processBGWorker.RunWorkerCompleted += ProcessBGWorker_RunWorkerCompleted;
+                //加载目录树
                 this.tv_Method.ExpandAll();
                 doc.Load("Resource\\PerformanceTreeXml.xml");
                 //doc.Load(Properties.Resources.TreeXml); 
@@ -54,13 +70,98 @@ namespace JsonTestServer
             }
         }
 
+        private void ProcessBGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if(e.Cancelled)
+            {
+                MessageBox.Show("Cancel.");
+            }
+            else
+            {
+                //避免取消操作后，出现两个MessageBox
+                MessageBox.Show("Done.");
+
+            }
+            EnableRequestButton(true);
+        }
+
+        private void ProcessBGWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.pbar_TestProcess.Value = e.ProgressPercentage;
+            string message = string.Empty;
+            if (e.UserState!=null)
+            {
+                message = e.UserState.ToString();
+            }
+            this.rtb_ACK.Text += string.Format("测试进度:({0}/{1})  {2}\r\n", e.ProgressPercentage, this.pbar_TestProcess.Maximum, message);
+            this.lb_Process.Text = string.Format("测试进度:({0}/{1})  {2}", e.ProgressPercentage, this.pbar_TestProcess.Maximum, message);
+        }
+
+        private void ProcessBGWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bgWorker = sender as BackgroundWorker;
+            string temp = string.Empty;
+            int endNumber = 0;
+            try
+            {
+                //耗时
+                if (e.Argument != null)
+                {
+                    Dictionary<decimal, BtnRequestType> tempDic = (Dictionary<decimal, BtnRequestType>)e.Argument;
+                    if (tempDic.Count > 0)
+                    {
+                        decimal key = tempDic.Keys.First<decimal>();
+                        BtnRequestType type = tempDic[key];
+                        endNumber = Convert.ToInt32(key);
+                    }
+                    //temp = Convert.ToString(tempDic.Values.First<object>());
+                }
+                for (int i = 1; i < endNumber; i++)
+                {
+                    if (bgWorker.CancellationPending == true)
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+                    try
+                    {
+                        
+                        //this.rtb_ACK.Text += i+temp;
+                    }
+                    catch (System.Exception ex)
+                    {
+                        bgWorker.ReportProgress(i, ex.ToString());
+                    }
+                    finally
+                    {
+                        bgWorker.ReportProgress(i);
+                    }
+                    Thread.Sleep(100);
+                }
+                temp = "Completed！！！";
+                bgWorker.ReportProgress(endNumber,temp);
+                e.Result = "";
+            }
+            catch (System.Exception ex)
+            {
+                bgWorker.ReportProgress(0,ex.ToString());
+            }
+        }
+
         private void btn_POST_Click(object sender, EventArgs e)
         {
+            EnableRequestButton(false);
             string strUrl = GetUrlString();
             string postdata = this.rtb_Data.Text;
             try
             {
-                this.rtb_ACK.Text = htmlUtil.HttpPost(strUrl, postdata);
+                this.rtb_ACK.Text = string.Empty;
+                this.pbar_TestProcess.Maximum = Convert.ToInt32(this.nud_Count.Value);
+                this.lb_Process.Text = string.Empty;
+                Dictionary<decimal, BtnRequestType> ee = new Dictionary<decimal, BtnRequestType>();
+                ee.Add(this.nud_Count.Value,BtnRequestType.POST);
+                this.processBGWorker.RunWorkerAsync(ee);
+                //this.rtb_ACK.Text = htmlUtil.HttpPost(strUrl, postdata);
             }
             catch (System.Exception ex)
             {
@@ -70,6 +171,7 @@ namespace JsonTestServer
 
         private void btn_POST8_Click(object sender, EventArgs e)
         {
+            EnableRequestButton(false);
             string strUrl = GetUrlString();
             string postdata = this.rtb_Data.Text;
             try
@@ -84,6 +186,7 @@ namespace JsonTestServer
 
         private void btn_GET_Click(object sender, EventArgs e)
         {
+            EnableRequestButton(false);
             string strUrl = GetUrlString();
             string postdata = this.rtb_Data.Text;
             try
@@ -230,6 +333,45 @@ namespace JsonTestServer
             path.SelectedPath = this.tb_LogPath.Text;
             path.ShowDialog();
             this.tb_LogPath.Text = path.SelectedPath;
+        }
+
+        private void EnableRequestButton(bool isEnable)
+        {
+            if (isEnable)
+            {
+                this.btn_POST.Enabled = true;
+                this.btn_POST8.Enabled = true;
+                this.btn_GET.Enabled = true;
+                this.btn_LogPathChoose.Enabled = true;
+                this.btn_Cancel.Enabled = false;
+            }
+            else
+            {
+                this.btn_POST.Enabled = false;
+                this.btn_POST8.Enabled = false;
+                this.btn_GET.Enabled = false;
+                this.btn_LogPathChoose.Enabled = false;
+                this.btn_Cancel.Enabled = true;
+            }
+        }
+
+        private void rtb_Data_TextChanged(object sender, EventArgs e)
+        {
+            RichTextBox rtBox = sender as RichTextBox;
+            if(!string.IsNullOrEmpty(rtBox.Text))
+            {
+                EnableRequestButton(true);
+            }
+            else
+            {
+                EnableRequestButton(false);
+            }
+        }
+
+        private void btn_Cancel_Click(object sender, EventArgs e)
+        {
+            processBGWorker.WorkerSupportsCancellation = true;
+            processBGWorker.CancelAsync();
         }
     }
 }
