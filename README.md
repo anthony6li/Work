@@ -15,7 +15,17 @@
 ## ChatRoom：网上查到的聊天室Demo，还需要优化。
 
 ## JsonACK：自己编写的c# 服务端，功能薄弱。
+``` c
+ var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+ socket.Bind(new IPEndPoint(IPAddress.Any, 9905));
+ socket.Listen(4)
+ socket.BeginAccept(new AsyncCallback(ClientAccepted), socket);
+ ...
+ var client = socket.EndAccept(ar);
+ client.send(byte[] buffer);
+ client.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveMessage), client);
+```
 
-## JsonTestServer：Json接口测试功能第一版，测试用例是封装好写死的。JsonTestTool是灵活的版本，用XML纪录测试用例。
+## JsonTestServer：Json接口测试功能第一版，测试用例是封装好写死的。单独的JsonTestTool工程是测试工具第二版，是灵活的版本，功能强大一些，用XML纪录测试用例。
 
 ## WindowsServiceTest：守护服务；Windows Service界面化安装；服务启动Winform已实现。
