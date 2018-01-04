@@ -27,5 +27,18 @@
 ```
 
 ## JsonTestServer：Json接口测试功能第一版，测试用例是封装好写死的。单独的JsonTestTool工程是测试工具第二版，是灵活的版本，功能强大一些，用XML纪录测试用例。
+``` c
+JsonSerializerSettings jsonSetting = new JsonSerializerSettings();                
+//解析时忽略Null Value的属性                
+jsonSetting.NullValueHandling = NullValueHandling.Ignore;                
+//可以解析继承类                
+jsonSetting.TypeNameHandling = TypeNameHandling.Auto;                
+jsonSetting.ConstructorHandling = ConstructorHandling.Default;                
+jsonSetting.Formatting = Formatting.None;                
+jsonSetting.ContractResolver = new CamelCasePropertyNamesContractResolver();
+JsonObjVersion joRS = new JsonObjVersion();                        
+joRS.method = type;
+string tempJsonStr = JsonConvert.SerializeObject(joRS, jsonSetting);
+```
 
 ## WindowsServiceTest：守护服务；Windows Service界面化安装；服务启动Winform已实现。
