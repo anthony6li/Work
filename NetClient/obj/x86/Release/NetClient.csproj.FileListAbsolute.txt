@@ -1,9 +1,0 @@
-E:\Projects\CSharp\TOOLS\NetClient\bin\Release\NetClient.exe
-E:\Projects\CSharp\TOOLS\NetClient\bin\Release\NetClient.pdb
-E:\Projects\CSharp\TOOLS\NetClient\bin\Release\Newtonsoft.Json.dll
-E:\Projects\CSharp\TOOLS\NetClient\obj\x86\Release\NetClient.MainForm.resources
-E:\Projects\CSharp\TOOLS\NetClient\obj\x86\Release\NetClient.Properties.Resources.resources
-E:\Projects\CSharp\TOOLS\NetClient\obj\x86\Release\NetClient.csproj.GenerateResource.Cache
-E:\Projects\CSharp\TOOLS\NetClient\obj\x86\Release\NetClient.exe
-E:\Projects\CSharp\TOOLS\NetClient\obj\x86\Release\NetClient.pdb
-E:\Projects\CSharp\TOOLS\NetClient\obj\x86\Release\NetClient.csprojResolveAssemblyReference.cache
