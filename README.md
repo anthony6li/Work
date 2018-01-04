@@ -15,7 +15,7 @@
 ## ChatRoom：网上查到的聊天室Demo，还需要优化。
 
 ## JsonACK：自己编写的c# 服务端，功能薄弱。
-``` c
+```c
  var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
  socket.Bind(new IPEndPoint(IPAddress.Any, 9905));
  socket.Listen(4)
@@ -27,7 +27,7 @@
 ```
 
 ## JsonTestServer：Json接口测试功能第一版，测试用例是封装好写死的。单独的JsonTestTool工程是测试工具第二版，是灵活的版本，功能强大一些，用XML纪录测试用例。
-``` c
+```c#
 JsonSerializerSettings jsonSetting = new JsonSerializerSettings();                
 //解析时忽略Null Value的属性                
 jsonSetting.NullValueHandling = NullValueHandling.Ignore;                
